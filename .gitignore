@@ -1,0 +1,42 @@
+# ============================================================
+# .gitignore — Multimodal Emotion Causal Validation
+# ============================================================
+
+# ---- Heavy Datasets (not tracked; see data/README.md for checksums) ----
+data/*
+!data/README.md
+Model/Dig-Data_Model-Main/data/RML_RAW_PROCESSED_Face/
+
+# ---- Model Weights & SHAP Pickles (not tracked; see checkpoints/README.md) ----
+checkpoints/*.pt
+checkpoints/*.pkl
+checkpoints/activations/
+
+# ---- Upstream Heavy Results ----
+Final_result/
+
+# ---- Unpublished Paper & Internal Working Documents ----
+*.docx
+
+# ---- AI Agent Internals ----
+.agents/
+skills-lock.json
+HANDOFF_SESSION_SUMMARY.md
+
+# ---- Internal Journal Guidelines (not for public review) ----
+journals/GUIDELINES.md
+
+# ---- OS & IDE Artifacts ----
+.DS_Store
+__MACOSX/
+*.pyc
+__pycache__/
+.ipynb_checkpoints/
+
+# ---- Legacy Upstream Notebooks (not part of Section VI-D) ----
+Model/Dig-Data_Model-Main/*.ipynb
+
+# ---- Upstream Training Artifacts ----
+Model/Dig-Data_Model-Main/savings/
+Model/Dig-Data_Model-Main/tensorboard/
+Model/Dig-Data_Model-Main/data/*.ipynb

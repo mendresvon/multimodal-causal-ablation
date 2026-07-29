@@ -1,0 +1,23 @@
+MESM model環境架設：
+    Python 3.8
+    PyTorch 2.0.0+cu118
+    torchaudio 2.0.1+cu118
+    torchvision 0.15.1+cu118
+    transformers 3.4.0 (huggingface)
+    sparseconvnet
+    facenet-pytorch 2.3.0
+    shap 0.42.0
+    基本上跟github連結的相同(https://github.com/wenliangdai/Multimodal-End2end-Sparse)
+請用anaconda create一個新環境後依次安裝
+    conda create --name MESM python=3.8
+    Pytorch請參照(https://pytorch.org/get-started/previous-versions/)並根據自己的電腦的GPU安裝對應的torch以及cuda版本
+    pip install transformers==3.4.0
+    pip install facenet-pytorch==2.3.0
+但在其中Spaerseconvnet(https://github.com/facebookresearch/SparseConvNet)的部份記得修改torch.div(x, rounding_mode='trunc')的function,
+因為torch1.6.0並沒有支援.div()的rounding_mode,可以將其改成//做單純的除法(此方法參照github連結中其之前的版本)(後來使用torch2.0.0不確定有沒有支援.div()。如果有就不必自行修改，直接安裝即可。)
+
+Spaerseconvnet package安裝：
+    將上述的.div()修改成//後執行下列兩個指令即可安裝完成
+        cd SparseConvNet/
+        bash develop.sh
+    記得使用conda list確認一下package是否安裝完成～

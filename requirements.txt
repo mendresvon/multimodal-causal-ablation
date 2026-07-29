@@ -1,0 +1,19 @@
+# Pinned dependencies for Section VI-D experiment
+# PyTorch 2.2.2 is required for ABI compatibility with the upstream model code
+torch==2.2.2
+torchaudio==2.2.2
+torchvision==0.17.2
+
+# Probe fitting and evaluation
+scikit-learn
+
+# Face detection for visual preprocessing
+facenet-pytorch
+
+# Data handling and analysis
+pandas
+numpy
+
+# Visualization
+matplotlib
+seaborn
