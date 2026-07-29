@@ -19,8 +19,8 @@ The experiment follows a five-phase protocol, formally documented in [ADR 0001](
 ## Repository Structure
 
 ```
-multimodal-emotion-causal-validation/
-├── multimodal-emotion-causal-validation.ipynb  # Main experiment notebook (runs on Colab GPU)
+multimodal-causal-ablation/
+├── multimodal-causal-ablation.ipynb  # Main experiment notebook (runs on Colab GPU)
 ├── src/
 │   └── utils.py                                # Deterministic seed utility
 ├── Model/Dig-Data_Model-Main/
@@ -59,7 +59,7 @@ The RML dataset (~3.2 GB) and model checkpoints (~173 MB each) are too large for
 
 ### Running
 
-The experiment is designed to run on Google Colab with a GPU runtime. Open `multimodal-emotion-causal-validation.ipynb`, connect to a T4 or V100 instance, and execute cells sequentially. Each phase includes resume gates that detect cached intermediate results, so you don't need to re-run expensive forward passes after a runtime reset.
+The experiment is designed to run on Google Colab with a GPU runtime. Open `multimodal-causal-ablation.ipynb`, connect to a T4 or V100 instance, and execute cells sequentially. Each phase includes resume gates that detect cached intermediate results, so you don't need to re-run expensive forward passes after a runtime reset.
 
 ## Lab Notebook
 
