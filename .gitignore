@@ -21,7 +21,6 @@ Final_result/
 # ---- AI Agent Internals ----
 .agents/
 skills-lock.json
-HANDOFF_SESSION_SUMMARY.md
 
 # ---- Internal Journal Guidelines (not for public review) ----
 journals/GUIDELINES.md

@@ -42,4 +42,4 @@ The notebook's first cell auto-detects runtime (Colab vs. local), mounts Google 
 *Why resume gates?* A full forward pass over RML for activation extraction takes ~15 minutes on a T4 GPU. If the Colab runtime resets after Phase B but before Phase C, re-running Phase B from scratch wastes GPU time and risks hitting Colab's daily usage limits.
 
 ### 6. Internal-Only Files
-`journals/GUIDELINES.md`, `HANDOFF_SESSION_SUMMARY.md`, `.agents/`, `skills-lock.json`, and all `.docx` files are excluded from Git. These contain AI agent configuration, unpublished paper drafts, and internal writing rules that would undermine the professional impression of the public repository.
+`journals/GUIDELINES.md`, `.agents/`, `skills-lock.json`, and all `.docx` files are excluded from Git. These contain AI agent configuration, unpublished paper drafts, and internal writing rules that would undermine the professional impression of the public repository.
