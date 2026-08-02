@@ -8,4 +8,4 @@ Chronological index of daily lab notebook entries for the Section VI-D neuron-le
 | [2026-07-29](2026-07-29.md) | Setup | `[COMPLETE]` | Project restructuring, checkpoint discovery, preliminary modality resolution (pending re-verification) |
 | [2026-07-30](2026-07-30.md) | Setup | `[COMPLETE]` | Infrastructure backbone: Git repo, journaling protocol, artifact architecture, deterministic seed, GitHub push |
 | [2026-07-31](2026-07-31.md) | Phase A | `[COMPLETE]` | Notebook restructuring, Phase A DeepSHAP aggregated attribution execution & Dominant Modality verdict |
-| [2026-08-02](2026-08-02.md) | Phase B | `[IN PROGRESS]` | Probe out-of-fold validation (failed), ADR 0001 late-fusion correction, discovered 512-d shape anomaly |
+| [2026-08-02](2026-08-02.md) | Phase B | `[COMPLETE]` | Fixed dataset mismatch, identified Text branch has no FFN (Tier 1 = Tier 2), successful L1-logistic validation on 1024-d ALBERT CLS token |
