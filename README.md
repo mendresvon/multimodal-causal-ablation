@@ -22,10 +22,10 @@ This table tracks experiment progress. Update it at the end of every session.
 
 | Phase | Status | Summary |
 | :--- | :--- | :--- |
-| A — Dominant Modality Verification | ✅ COMPLETE | Aggregated SHAP attribution computed; Text dominant (~70%), Audio secondary (~25-30%) |
-| B — Probe Signal Validation | ✅ COMPLETE | L1 probes on 1024-d Text CLS (Tier 1) passed. Base Mean AUC: 0.73. FT Mean AUC: 0.67. |
-| C — Causal Ablation | ✅ COMPLETE | Mean-ablation sweep k={1,3,5,10} evaluated; extreme substrate dispersion observed |
-| D — Transfer Retention Analysis | 🔄 IN PROGRESS | Initial cross-ablation done; methodology audit found 16 issues requiring remediation (see `docs/master_audit_report.md`) |
+| A — Dominant Modality Verification | 🔄 IN PROGRESS | Dataset extraction restarted to fix 144-sample bug (P1 fix); 73/90 batches cached |
+| B — Probe Signal Validation | ⬜ PENDING | Pending valid Phase A features |
+| C — Causal Ablation | ⬜ PENDING | Pending valid Phase B probes |
+| D — Transfer Retention Analysis | ⬜ PENDING | Pending valid Phase C ablation results |
 | E — Results & Paper Integration | ⬜ PENDING | Tables VII/VIII, Figure 6, Section VI-D text |
 
 ## Key Files Reference
