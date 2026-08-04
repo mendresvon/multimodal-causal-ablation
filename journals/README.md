@@ -11,3 +11,4 @@ Chronological index of daily lab notebook entries for the Section VI-D neuron-le
 | [2026-08-02](2026-08-02.md) | Phase B | `[COMPLETE]` | Fixed dataset mismatch, identified Text branch has no FFN (Tier 1 = Tier 2), successful L1-logistic validation on 1024-d ALBERT CLS token |
 | [2026-08-03](2026-08-03.md) | Phase C | `[PREPARED]` | Drafted Colab notebook code for class-selectivity ratio computation and ablation hooks |
 | [2026-08-04](2026-08-04.md) | Phase C | `[COMPLETE]` | Executed mean-ablation sweep with proxy inference; found extreme substrate dispersion |
+| [2026-08-04 (evening)](2026-08-04-evening.md) | Phase D | `[IN PROGRESS]` | Phase D executed but methodology audit found 16 issues; remediation in progress |
