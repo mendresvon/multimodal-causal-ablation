@@ -3,6 +3,7 @@
 torch==2.2.2
 torchaudio==2.2.2
 torchvision==0.17.2
+transformers==4.38.2
 
 # Probe fitting and evaluation
 scikit-learn
@@ -12,7 +13,7 @@ facenet-pytorch
 
 # Data handling and analysis
 pandas
-numpy
+numpy<2.0.0
 
 # Visualization
 matplotlib
