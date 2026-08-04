@@ -1,10 +1,4 @@
 model,class,baseline_acc,target_drop,mean_nt_drop,ratio,causally_selective
-base,anger,75.0,0.0,0.83,0.00,False
-base,disgust,87.5,0.0,0.0,0.00,False
-base,fear,54.17,0.0,0.83,0.00,False
-base,happiness,83.33,0.0,0.83,0.00,False
-base,sadness,70.83,0.0,0.83,0.00,False
-base,surprise,87.5,4.17,0.0,inf,True
 finetuned,anger,79.17,0.0,0.0,0.00,False
 finetuned,disgust,83.33,0.0,0.0,0.00,False
 finetuned,fear,66.67,0.0,0.0,0.00,False
