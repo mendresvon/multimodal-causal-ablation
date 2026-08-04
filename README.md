@@ -16,29 +16,32 @@ The experiment follows a five-phase protocol, formally documented in [ADR 0001](
 - **Phase D — Transfer Retention Analysis:** Ablate the base model's top neurons inside the fine-tuned model to compute a Transfer Retention Ratio. This classifies the fine-tuning outcome as Substrate Preservation (neurons sharpened), Substrate Reassignment (representation shifted to different neurons), or Substrate Dispersion (representation became distributed).
 - **Phase E — Results & Paper Integration:** Generate publication figures and tables for the IEEE submission.
 
-## Repository Structure
+## Phase Roadmap (Live Status)
 
-```
-multimodal-causal-ablation/
-├── multimodal-causal-ablation.ipynb  # Main experiment notebook (runs on Colab GPU)
-├── src/
-│   └── utils.py                                # Deterministic seed utility
-├── Model/Dig-Data_Model-Main/
-│   ├── src/                                    # Upstream model architecture (PyTorch)
-│   │   ├── models/e2e.py                       # End-to-end multimodal model definition
-│   │   ├── datasets.py                         # Data loading and preprocessing
-│   │   └── ...
-│   └── main.py                                 # Training entry point
-├── checkpoints/                                # Model weights & SHAP pickles (not in Git; see README)
-├── data/                                       # RML dataset (not in Git; see README)
-├── results/                                    # Numerical experiment outputs (CSV, JSON)
-├── figures/                                    # Publication-quality plots (PNG, SVG)
-├── journals/                                   # Daily lab notebook entries
-├── docs/adr/                                   # Architectural decision records
-├── CONTEXT.md                                  # Domain glossary and canonical terminology
-└── requirements.txt                            # Pinned Python dependencies
-```
+This table tracks experiment progress. Update it at the end of every session.
 
+| Phase | Status | Summary |
+| :--- | :--- | :--- |
+| A — Dominant Modality Verification | ✅ COMPLETE | Aggregated SHAP attribution computed; Text dominant (~70%), Audio secondary (~25-30%) |
+| B — Probe Signal Validation | ✅ COMPLETE | L1 probes on 1024-d Text CLS (Tier 1) passed. Base Mean AUC: 0.73. FT Mean AUC: 0.67. |
+| C — Causal Ablation | ✅ COMPLETE | Mean-ablation sweep k={1,3,5,10} evaluated; extreme substrate dispersion observed |
+| D — Transfer Retention Analysis | 🔄 IN PROGRESS | Cross-ablation, compute R, classify substrate outcome |
+| E — Results & Paper Integration | ⬜ PENDING | Tables VII/VIII, Figure 6, Section VI-D text |
+
+## Key Files Reference
+
+| File | Purpose |
+| :--- | :--- |
+| `multimodal-causal-ablation.ipynb` | Main experiment notebook — runs on Google Colab GPU |
+| `CONTEXT.md` | Domain glossary with canonical terminology. |
+| `docs/adr/0001-causal-validation-methodology.md` | Locked methodology decisions: thresholds, fallback tiers, taxonomy |
+| `docs/adr/0002-infrastructure-and-journaling-protocol.md` | Infrastructure decisions: Git scope, journals, artifact naming, seed policy |
+| `checkpoints/README.md` | SHA-256 checksums for model weights and SHAP pickles |
+| `data/README.md` | Dataset provenance and acquisition instructions |
+| `journals/GUIDELINES.md` | Internal journal writing template and tone rules |
+| `journals/README.md` | Chronological index of all journal entries with phase and status |
+| `src/utils.py` | Contains `set_deterministic_seed(seed=0)` |
+| `requirements.txt` | Pinned dependencies (PyTorch 2.2.2) |
 ## Reproducibility
 
 ### Prerequisites
