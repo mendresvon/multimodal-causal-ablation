@@ -1,2 +1,7 @@
 class,base_top5_neurons,base_target_drop,ft_target_drop,retention_ratio_R,ft_is_selective,substrate_outcome
-surprise,[447 418 669 626 249],4.17,0.0,0.0,False,Substrate Dispersion
+anger,"[43, 6, 39, 62, 27]",0.0,4.17,0.0,True,Substrate Reassignment
+disgust,"[61, 44, 30, 50, 53]",0.0,0.0,0.0,False,Substrate Dispersion
+fear,"[44, 43, 41, 56, 20]",0.0,0.0,0.0,False,Substrate Dispersion
+happiness,"[18, 49, 6, 27, 44]",0.0,0.0,0.0,False,Substrate Dispersion
+sadness,"[31, 54, 52, 7, 26]",0.0,0.0,0.0,False,Substrate Dispersion
+surprise,"[62, 35, 30, 45, 8]",0.0,0.0,0.0,False,Substrate Dispersion
