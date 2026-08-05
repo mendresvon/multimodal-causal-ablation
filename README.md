@@ -22,10 +22,10 @@ This table tracks experiment progress. Update it at the end of every session.
 
 | Phase | Status | Summary |
 | :--- | :--- | :--- |
-| A — Dominant Modality Verification | 🔄 IN PROGRESS | Dataset extraction restarted to fix 144-sample bug (P1 fix); 73/90 batches cached |
-| B — Probe Signal Validation | ⬜ PENDING | Pending valid Phase A features |
-| C — Causal Ablation | ⬜ PENDING | Pending valid Phase B probes |
-| D — Transfer Retention Analysis | ⬜ PENDING | Pending valid Phase C ablation results |
+| A — Dominant Modality Verification | 🔄 IN PROGRESS | SHAP aggregation formula needs fix (`mean(\|phi\|)` normalization); recompute dominant modality verdict |
+| B — Probe Signal Validation | ⚠️ NEEDS RE-EVAL | Probe-fit data leakage (fitted on all 720 samples including test); re-fit on training set only |
+| C — Causal Ablation | ⚠️ NEEDS RE-EVAL | Evaluated on 144 test samples only; needs full-dataset eval and dose-response control (k=16,32,48,64) |
+| D — Transfer Retention Analysis | ⚠️ NEEDS RE-EVAL | R = 0/0 for all classes; taxonomy inapplicable; cosine similarity contradicts ablation result |
 | E — Results & Paper Integration | ⬜ PENDING | Tables VII/VIII, Figure 6, Section VI-D text |
 
 ## Key Files Reference
