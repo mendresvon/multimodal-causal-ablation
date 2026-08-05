@@ -48,19 +48,17 @@ The experiment history reveals a tortuous path:
 3. **Aug 5 session:** Switched target to **Audio (64-d)**. Correctly re-sliced `base_acts_tier1 = base_full_1152[:, 1088:1152]`.
 4. **Current result files:** `phase_a_dominant_modality_verdict.csv` now reports **Audio dominant** (Base: 50.48%, FT: 58.51%).
 
-**But the Phase A SHAP aggregation code (Cell 10) still uses the flawed formula:**
+**But the Phase A SHAP aggregation code (Cell 10) still uses the net-signed formula:**
 ```python
 per_sample = np.abs(np.sum(sv[:, start:end], axis=1))
 ```
 
-This computes `|sum(SHAP)|` — which measures the **net signed attribution** of a modality. The correct metric for *contribution magnitude* is `sum(|SHAP|)`:
-```python
-per_sample = np.sum(np.abs(sv[:, start:end]), axis=1)
-```
+This computes `|Σφᵢ|` — which measures the **net directional push** of a modality. However, signed cancellation increases with feature dimensionality:
+- `|Σφᵢ|` (current code): Measures net directional push. Biased toward low-d modalities (Audio 64-d) because 1024-d Text features cancel each other out.
+- `Σ|φᵢ|`: Measures total absolute attribution. Biased toward high-d modalities (Text 1024-d) because summing 1024 non-negative noise terms inflates the scalar.
+- `mean(|φᵢ|)`: `np.mean(np.abs(sv[:, start:end]), axis=1)` — measures **average per-feature importance**. This is **dimension-invariant** and directly measures how influential the average neuron is in that branch.
 
-**Why this matters:** With `|sum(SHAP)|`, SHAP values within a modality cancel each other out. A modality where half the features have positive SHAP and half have negative SHAP (common in high-dimensional representations like Text's 1024-d) would appear to contribute nearly zero, even if each individual feature is highly important. Audio's 64-d representation suffers less cancellation simply because it has fewer features. The current aggregation method **systematically biases toward lower-dimensional modalities**.
-
-**Impact on results:** The dominant modality verdict (Audio vs Text) may be an artifact of the aggregation formula. If the correct `sum(|SHAP|)` formula restores Text as dominant, then the entire experiment targeted the wrong modality branch — and the near-zero ablation drops would be trivially explained (you were ablating the secondary modality, not the dominant one).
+**Impact on results:** The dominant modality verdict should be grounded in the dimension-normalized metric `mean(|φᵢ|)`. To ensure maximum scientific rigor, all three metrics (`mean(|φᵢ|)`, `Σ|φᵢ|`, and `|Σφᵢ|`) should be computed and reported in Section VI-D with clear semantic explanations.
 
 > [!CAUTION]
 > This single issue potentially invalidates the entire experimental pipeline from Phase A onward. A reviewer who checks the SHAP aggregation formula will catch this immediately.
@@ -338,7 +336,11 @@ Sets R=0.0 when base_drop=0, which forces "Substrate Dispersion." Should be flag
 - **Base:** Audio 50.48%, Text 43.66%, Video 5.86%
 - **FT:** Audio 58.51%, Text 36.15%, Video 5.34%
 - Audio leads by 6.81% (base) and 22.36% (FT) — above 5% threshold → Audio dominant.
-- ⚠️ **BUT** these percentages were computed with the `|sum(SHAP)|` formula. With `sum(|SHAP|)`, the results would likely differ significantly (Text has 16x more features, so more cancellation under signed summation).
+- ⚠️ **BUT** these percentages were computed with the `|Σφᵢ|` (net signed) formula. 
+  - `|Σφᵢ|` biases toward low-d branches due to less cancellation.
+  - `Σ|φᵢ|` biases toward high-d branches by accumulating 1024 noise terms.
+  - `mean(|φᵢ|)` (`np.mean(np.abs(sv[:, start:end]), axis=1)`) is the **dimension-invariant** metric measuring average per-feature importance.
+  - All three metrics (`mean(|φᵢ|)`, `Σ|φᵢ|`, and `|Σφᵢ|`) must be reported in Section VI-D for complete transparency, with the dominant modality decision grounded in `mean(|φᵢ|)`.
 
 ### Phase B (Probe AUCs)
 - **Base:** Mean AUC 0.85 (range: 0.75–0.94). All classes > 0.55. ✅ PASS.
@@ -367,7 +369,7 @@ The results tell a **coherent but incomplete** story:
 
 Interpretation options:
 - **(A) The model is genuinely robust** to sparse Audio neuron ablation because multimodal redundancy compensates. This is plausible but requires a dose-response control.
-- **(B) The SHAP aggregation is wrong** and Audio isn't actually dominant. If Text is dominant and you're ablating Audio, near-zero drops are trivially expected.
+- **(B) The SHAP aggregation is wrong** and Audio isn't actually dominant under the normalized `mean(|φᵢ|)` metric. If Text is dominant and you're ablating Audio, near-zero drops are trivially expected.
 - **(C) The evaluation set is too small** (n=24 per class) to detect real effects.
 
 **All three explanations are simultaneously possible.** The paper needs to rule out (B) and (C) before claiming (A).
@@ -378,7 +380,7 @@ Interpretation options:
 
 | Priority | Issue | Action | Effort | Impact |
 |:---|:---|:---|:---|:---|
-| **P0** | SHAP aggregation formula | Change `\|sum(SHAP)\|` to `sum(\|SHAP\|)` in Cell 10. Recompute dominant modality verdict. If Text becomes dominant, the entire experiment must be re-evaluated. | 10 min | Potentially invalidates everything |
+| **P0** | SHAP aggregation metric | Update Cell 10 to evaluate `mean(\|φᵢ\|)` (`np.mean(np.abs(...))`) alongside `Σ\|φᵢ\|` and `\|Σφᵢ\|`. Recompute dominant modality verdict on `mean(\|φᵢ\|)`. If Text becomes dominant, re-evaluate target modality. | 15 min | Potentially invalidates target modality |
 | **P1** | Test-only evaluation (144 samples) | Evaluate ablation on full 720 samples, reporting train and test accuracy separately. | 30 min | Increases statistical power 5x |
 | **P2** | Dose-response control | Add k=16, k=32, k=48, k=64 to the sweep to show whether *any* ablation level causes drops. | 30 min | Required to support "redundancy" claim |
 | **P3** | Undefined R taxonomy | When base_drop = 0, report R as "N/A" instead of 0.0. Modify substrate outcome logic to output "Indeterminate (Base Effect Undetected)" | 15 min | Honest reporting |
@@ -391,7 +393,7 @@ Interpretation options:
 ## PART 7: What a Peer Reviewer Would Say
 
 > **Reviewer 1 (Methodology):**
-> "The authors claim to identify the dominant modality via aggregated SHAP attribution, but their aggregation formula `|sum(SHAP)|` allows signed cancellation within modalities, systematically favoring lower-dimensional branches. The correct formula is `sum(|SHAP|)`. This methodological error may have led the authors to target the wrong modality. Additionally, evaluating causal ablation on only 24 samples per class provides negligible statistical power. The Transfer Retention Ratio is undefined (0/0) for all classes, making the substrate taxonomy classifications meaningless. Major revision required."
+> "The authors claim to identify the dominant modality via aggregated SHAP attribution, but their net-signed aggregation formula `|Σφᵢ|` allows intra-modality cancellation, systematically favoring lower-dimensional branches (Audio 64-d vs Text 1024-d). While raw sum `Σ|φᵢ|` conversely inflates high-dimensional branches by accumulating noise, the authors should report the dimension-normalized average attribution `mean(|φᵢ|)` to fairly compare feature importance across branches. Additionally, evaluating causal ablation on only 24 samples per class provides negligible statistical power. The Transfer Retention Ratio is undefined (0/0) for all classes, making the substrate taxonomy classifications meaningless. Major revision required."
 
 > **Reviewer 2 (Experimental Design):**
 > "The ablation results show zero effect across all conditions, but the authors interpret this as evidence of 'multimodal redundancy' without providing dose-response evidence (what happens at k=32 or k=64?). A full-modality knockout (ablate all 64 Audio neurons) would be far more informative. Without this control, the null result is uninterpretable — it could equally reflect targeting the wrong modality, insufficient statistical power, or genuine redundancy. The claim is not adequately supported."
@@ -405,7 +407,7 @@ Interpretation options:
 
 The experiment has a **sound conceptual framework** and the proxy inference mechanism is mathematically verified. The remediation since Aug 4 fixed many code bugs. However, three fundamental issues remain:
 
-1. **The SHAP aggregation formula may point to the wrong modality** (P0 — must be checked immediately)
+1. **The SHAP aggregation formula needs dimension-normalization (`mean(|φᵢ|)`)** (P0 — must be checked immediately)
 2. **The evaluation has negligible statistical power** (P1+P2 — 24 samples per class, no dose-response)
 3. **The Transfer Retention taxonomy is vacuous** when base drops are zero (P3)
 
