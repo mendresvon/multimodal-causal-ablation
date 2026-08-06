@@ -20,3 +20,4 @@ Chronological index of daily lab notebook entries for the Section VI-D neuron-le
 | [2026-08-05 (session 2)](2026-08-05-session2.md) | Phase C | `[COMPLETE]` | Identified critical bug: causal ablation proxy inference was evaluating the training set; requires slicing to test set |
 | [2026-08-06 (session 1)](2026-08-06.md) | Phase D | `[COMPLETE]` | Experiment concluded. Discovered that multimodal redundancy suppresses causal ablation drops despite high SHAP attribution |
 | [2026-08-06 (session 2)](2026-08-06-session2.md) | Audit | `[COMPLETE]` | Comprehensive quadruple-check audit against Prof KC Lan's protocol; 7 critical/high issues identified including SHAP formula bias |
+| [2026-08-06 (session 3)](2026-08-06-session3.md) | Phase A–D | `[COMPLETE]` | Executed audit remediation: mean(|phi|) SHAP formula (Audio 75.9% dominant), dose-response k=1..64 sweeps, full 720-sample eval, and non-zero retention ratios |
