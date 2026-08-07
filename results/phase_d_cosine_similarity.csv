@@ -1,7 +1,0 @@
-class,cosine_similarity,interpretation
-anger,0.9048,High Sharpening
-disgust,0.7491,High Sharpening
-fear,0.9832,High Sharpening
-happiness,0.7089,High Sharpening
-sadness,0.957,High Sharpening
-surprise,0.9394,High Sharpening

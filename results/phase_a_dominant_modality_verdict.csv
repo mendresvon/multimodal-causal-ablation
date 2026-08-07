@@ -1,3 +1,0 @@
-model,dominant_modality,Text_pct,Video_pct,Audio_pct,top_modality,second_modality,gap_pct,parity_rule_applied,reason
-base,Audio,43.6622,5.8616,50.4762,Audio,Text,6.814,False,Audio leads with 50.48% vs Text at 43.66% (gap = 6.81% > 5% threshold).
-finetuned,Audio,36.1521,5.3354,58.5124,Audio,Text,22.3603,False,Audio leads with 58.51% vs Text at 36.15% (gap = 22.36% > 5% threshold).

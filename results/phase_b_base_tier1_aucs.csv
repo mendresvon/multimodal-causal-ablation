@@ -1,7 +1,0 @@
-model,class,auc
-base,anger,0.9394
-base,disgust,0.8761
-base,fear,0.7508
-base,happiness,0.8002
-base,sadness,0.9091
-base,surprise,0.8262

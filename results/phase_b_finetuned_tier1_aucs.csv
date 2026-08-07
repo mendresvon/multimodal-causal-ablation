@@ -1,7 +1,0 @@
-model,class,auc
-finetuned,anger,0.9288
-finetuned,disgust,0.82
-finetuned,fear,0.7082
-finetuned,happiness,0.8154
-finetuned,sadness,0.9179
-finetuned,surprise,0.8429
