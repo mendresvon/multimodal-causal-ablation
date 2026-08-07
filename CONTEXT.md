@@ -29,17 +29,22 @@ A set of top-k neurons whose mean-ablation causes a target class accuracy drop a
 _Distinguish from_: Class neuron group (not necessarily causal), target feature set
 
 **Transfer Retention Ratio (R)**:
-The ratio of the accuracy drop when base-model top-5 neurons are ablated inside the fine-tuned model compared to when ablated inside the base model.
+The ratio of the accuracy drop when base-model top neurons are ablated inside the fine-tuned model compared to when ablated inside the base model (R = ft_drop / base_drop). Under ADR 0003, R is evaluated only when base_drop >= epsilon (0.05); otherwise marked as N/A (Non-Selective in Base).
 _Distinguish from_: Cross-ablation score, transfer ratio (too generic)
 
 **Substrate Preservation**:
-Outcome where R >= 0.70, proving fine-tuning preserves and sharpens the base model's physical load-bearing neurons.
+Outcome where R >= 0.80, proving fine-tuning preserves and sharpens the base model's physical load-bearing neurons.
 _Distinguish from_: Substrate retention, feature preservation (does not imply sharpening)
 
 **Substrate Reassignment**:
-Outcome where R < 0.30 but fine-tuned own top-5 ablation drop is large, proving class representation shifted to different units within the modality.
+Outcome where 0.20 <= R < 0.80, proving class representation partially shifted to different units within the modality.
 _Distinguish from_: Neuron drift (implies gradual change), feature relocation
 
 **Substrate Dispersion**:
-Outcome where both R < 0.30 and fine-tuned own top-5 drop is small, proving representation became dense/distributed.
+Outcome where R < 0.20, proving representation lost reliance on base substrate neurons.
 _Distinguish from_: Feature blurring, representation decay (implies degradation rather than redistribution)
+
+**Polysemantic Collateral Damage**:
+Accuracy drops observed on non-target emotion classes when ablating top-k neurons of a target class, caused by individual raw neurons representing multiple features in superposition.
+_Distinguish from_: Off-target degradation, generic model failure
+
