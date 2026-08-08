@@ -1,20 +1,20 @@
-# Pinned dependencies for Section VI-D experiment
-# PyTorch 2.2.2 is required for ABI compatibility with the upstream model code
+# Core PyTorch Framework (Pinned for ABI compatibility with upstream model code)
 torch==2.2.2
 torchaudio==2.2.2
 torchvision==0.17.2
+
+# Transformers (Tokenizer & ALBERT backbone)
 transformers==4.38.2
 
-# Probe fitting and evaluation
-scikit-learn
-
-# Face detection for visual preprocessing
+# Face detection preprocessing
 facenet-pytorch
 
-# Data handling and analysis
-pandas
-numpy<2.0.0
+# Probe fitting & held-out ROC-AUC evaluation
+scikit-learn
 
-# Visualization
+# Numerical computation & data handling
+numpy<2.0.0
+pandas
+
+# Publication visualization
 matplotlib
-seaborn
