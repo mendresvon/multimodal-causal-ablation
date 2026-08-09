@@ -1,10 +1,19 @@
-# Core PyTorch Framework (Pinned for ABI compatibility with upstream model code)
+# Core PyTorch Framework
+# NOTE: these pins are for local/offline reproduction on a matching Python
+# version only. They are NOT installed in the Colab notebooks -- torch 2.2.2
+# predates Colab's current Python 3.12 image and has no wheel for it. The
+# notebooks instead self-check/auto-repair a mutually compatible torch/
+# torchaudio/torchvision trio at runtime (see the "ABI self-check & auto-
+# repair" cell in Day 0 setup) to avoid the torch/torchaudio ABI mismatch
+# (`undefined symbol: aoti_torch_abi_version`) that Colab's preinstalled
+# trio can drift into.
 torch==2.2.2
 torchaudio==2.2.2
 torchvision==0.17.2
 
 # Transformers (Tokenizer & ALBERT backbone)
 transformers==4.38.2
+sentencepiece  # required by AlbertTokenizer (slow, SentencePiece-backed)
 
 # Face detection preprocessing
 facenet-pytorch
