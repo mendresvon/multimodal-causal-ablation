@@ -29,7 +29,7 @@ A set of top-k neurons whose mean-ablation causes a target class accuracy drop a
 _Distinguish from_: Class neuron group (not necessarily causal), target feature set
 
 **Transfer Retention Ratio (R)**:
-The ratio of the accuracy drop when base-model top neurons are ablated inside the fine-tuned model compared to when ablated inside the base model (R = ft_drop / base_drop). Under ADR 0003, R is evaluated only when base_drop >= epsilon (0.05); otherwise marked as N/A (Non-Selective in Base).
+The ratio of the accuracy drop when base-model top neurons are ablated inside the fine-tuned model compared to when ablated inside the base model (R = ft_drop / base_drop). Reported for every class on real data; under ADR 0004 the prior epsilon-screen (marking small-base_drop classes as N/A) is withdrawn — it was introduced to hide artifacts from the v1/v2 broken data pipeline, not a genuine statistical need.
 _Distinguish from_: Cross-ablation score, transfer ratio (too generic)
 
 **Substrate Preservation**:
