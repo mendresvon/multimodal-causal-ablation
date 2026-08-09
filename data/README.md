@@ -9,7 +9,7 @@ The RML data used by this project is too large for Git and is stored on Google D
 
 ## Do not use
 
-`RML_RAW_PROCESSED_Face.tar.gz` / the `RML_RAW_PROCESSED_Face/` folder is **retired**. Its `meta.pkl` was fabricated by an earlier agent session and does not exist in that archive's actual contents — evaluating the correct model checkpoints against it produced the garbage results diagnosed in `journals/2026-08-09.md`.
+`RML_RAW_PROCESSED_Face.tar.gz` / the `RML_RAW_PROCESSED_Face/` folder is **retired**. Its `meta.pkl` was fabricated by an earlier agent session and does not exist in that archive's actual contents — evaluating the correct model checkpoints against it produced the garbage results diagnosed in `journals/2026-08-09-session1.md`.
 
 ## Verification
 

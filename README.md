@@ -20,7 +20,7 @@ The experiment follows the four-week protocol in [`experiment_protocol[From Prof
 
 This table tracks experiment progress. Update it at the end of every session.
 
-**2026-08-09 restart:** all prior numbers (both `multimodal-causal-ablation.ipynb` and `-v2.ipynb`) are retracted. Root cause: the notebook evaluated the correct, SHA-verified checkpoints against a fabricated `meta.pkl` instead of the canonical merged-corpus data source. See [ADR 0004](docs/adr/0004-v3-restart-data-provenance-and-fidelity-gate.md) and [`journals/2026-08-09.md`](journals/2026-08-09.md) for the full diagnosis. The notebook was then hardened and re-aligned to the protocol's Day/Week schedule — see [ADR 0005](docs/adr/0005-day0-dominant-modality-recompute-and-protocol-alignment.md) and [`journals/2026-08-09-session2.md`](journals/2026-08-09-session2.md).
+**2026-08-09 restart:** all prior numbers (both `multimodal-causal-ablation.ipynb` and `-v2.ipynb`) are retracted. Root cause: the notebook evaluated the correct, SHA-verified checkpoints against a fabricated `meta.pkl` instead of the canonical merged-corpus data source. See [ADR 0004](docs/adr/0004-v3-restart-data-provenance-and-fidelity-gate.md) and [`journals/2026-08-09-session1.md`](journals/2026-08-09-session1.md) for the full diagnosis. The notebook was then hardened and re-aligned to the protocol's Day/Week schedule — see [ADR 0005](docs/adr/0005-day0-dominant-modality-recompute-and-protocol-alignment.md) and [`journals/2026-08-09-session2.md`](journals/2026-08-09-session2.md).
 
 | Protocol stage | Status | Summary |
 | :--- | :--- | :--- |
