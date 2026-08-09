@@ -5,8 +5,12 @@ Domain model and ubiquitous language for neuron-level causal validation of modal
 ## Language
 
 **Dominant Modality**:
-The single input modality (audio, visual, or text) that contributes the highest aggregated DeepSHAP attribution score for a given model and dataset combination.
+The single input modality (audio, visual, or text) whose neurons carry the highest **per-neuron** DeepSHAP attribution, `mean(|phi|)`, for a given model and dataset combination. Per-neuron rather than aggregate because the intervention is per-neuron: `mean(|phi|)` is `sum(|phi|)` divided by the modality's dimension count, so an aggregate reading rewards width alone (text's 1024 dims against audio's 64). For RML both readings are reported — audio leads per neuron, text leads on aggregate mass — and they are two views of one measurement, never two metrics that disagree. See [ADR 0005](docs/adr/0005-day0-dominant-modality-recompute-and-protocol-alignment.md).
 _Distinguish from_: Primary channel, main signal, winning modality
+
+**Aggregate Attribution Mass**:
+`sum(|phi|)` over a modality's dimensions — the total DeepSHAP attribution a modality contributes. Scales with dimension count, so it answers "how much does this branch matter in total", not "how much does each of its units matter".
+_Distinguish from_: Per-neuron attribution (`mean(|phi|)`), dominant modality (defined per-neuron above)
 
 **Causal Ablation**:
 An experimental intervention during inference where specific neuron activations are overwritten to measure their direct causal effect on classification performance.
@@ -33,7 +37,7 @@ The ratio of the accuracy drop when base-model top neurons are ablated inside th
 _Distinguish from_: Cross-ablation score, transfer ratio (too generic)
 
 **Substrate Preservation**:
-Outcome where R >= 0.80, proving fine-tuning preserves and sharpens the base model's physical load-bearing neurons.
+Outcome where R >= 0.80 (these bands, not ADR 0001 Decision 4's R >= 0.70 / R < 0.30 — see [ADR 0005](docs/adr/0005-day0-dominant-modality-recompute-and-protocol-alignment.md) Decision 7 for why), proving fine-tuning preserves and sharpens the base model's physical load-bearing neurons.
 _Distinguish from_: Substrate retention, feature preservation (does not imply sharpening)
 
 **Substrate Reassignment**:
