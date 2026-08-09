@@ -20,28 +20,29 @@ The experiment follows a five-phase protocol, formally documented in [ADR 0001](
 
 This table tracks experiment progress. Update it at the end of every session.
 
+**2026-08-09 restart:** all prior Phase A-D numbers (both `multimodal-causal-ablation.ipynb` and `-v2.ipynb`) are retracted. Root cause: the notebook evaluated the correct, SHA-verified checkpoints against a fabricated `meta.pkl` instead of the canonical merged-corpus data source. See [ADR 0004](docs/adr/0004-v3-restart-data-provenance-and-fidelity-gate.md) and [`journals/2026-08-09.md`](journals/2026-08-09.md) for the full diagnosis.
+
 | Phase | Status | Summary |
 | :--- | :--- | :--- |
-| A — Dominant Modality Verification | 🔄 IN PROGRESS | SHAP aggregation formula needs fix (`mean(\|phi\|)` normalization); recompute dominant modality verdict |
-| B — Probe Signal Validation | ⚠️ NEEDS RE-EVAL | Probe-fit data leakage (fitted on all 720 samples including test); re-fit on training set only |
-| C — Causal Ablation | ⚠️ NEEDS RE-EVAL | Evaluated on 144 test samples only; needs full-dataset eval and dose-response control (k=16,32,48,64) |
-| D — Transfer Retention Analysis | ⚠️ NEEDS RE-EVAL | R = 0/0 for all classes; taxonomy inapplicable; cosine similarity contradicts ablation result |
-| E — Results & Paper Integration | ⬜ PENDING | Tables VII/VIII, Figure 6, Section VI-D text |
+| A — Dominant Modality Verification | ⬜ NOT STARTED (v3) | Prior verdict retracted; will recompute once Day 0 fidelity gate passes |
+| B — Probe Signal Validation | ⬜ NOT STARTED (v3) | Prior numbers retracted (fit on mismatched data) |
+| C — Causal Ablation | ⬜ NOT STARTED (v3) | Prior sweep retracted; blocked on Day 0 fidelity gate + falsification pair |
+| D — Transfer Retention Analysis | ⬜ NOT STARTED (v3) | Prior taxonomy retracted; ε=0.05 screen withdrawn pending real drops |
+| E — Results & Paper Integration | ⬜ PENDING | Tables VII/VIII/IX, Section VI-D text |
 
 ## Key Files Reference
 
 | File | Purpose |
 | :--- | :--- |
-| `multimodal-causal-ablation.ipynb` | Main experiment notebook — runs on Google Colab GPU |
+| `multimodal-causal-ablation-v3.ipynb` | Main experiment notebook (in progress) — runs on Google Colab GPU |
 | `CONTEXT.md` | Domain glossary with canonical terminology. |
 | `docs/adr/0001-causal-validation-methodology.md` | Locked methodology decisions: thresholds, fallback tiers, taxonomy |
 | `docs/adr/0002-infrastructure-and-journaling-protocol.md` | Infrastructure decisions: Git scope, journals, artifact naming, seed policy |
+| `docs/adr/0004-v3-restart-data-provenance-and-fidelity-gate.md` | Root-cause diagnosis of the v1/v2 failures, canonical data source, halting fidelity gate |
 | `checkpoints/README.md` | SHA-256 checksums for model weights and SHAP pickles |
-| `data/README.md` | Dataset provenance and acquisition instructions |
 | `journals/GUIDELINES.md` | Internal journal writing template and tone rules |
 | `journals/README.md` | Chronological index of all journal entries with phase and status |
 | `src/utils.py` | Contains `set_deterministic_seed(seed=0)` |
-| `requirements.txt` | Pinned dependencies (PyTorch 2.2.2) |
 ## Reproducibility
 
 ### Prerequisites
@@ -50,19 +51,13 @@ This table tracks experiment progress. Update it at the end of every session.
 - CUDA-capable GPU (experiments run on Google Colab T4/V100)
 - PyTorch 2.2.2 (pinned for C++ ABI compatibility with upstream model code)
 
-### Setup
-
-```bash
-pip install -r requirements.txt
-```
-
 ### Data & Checkpoints
 
-The RML dataset (~3.2 GB) and model checkpoints (~173 MB each) are too large for Git. See [`data/README.md`](data/README.md) for acquisition instructions and [`checkpoints/README.md`](checkpoints/README.md) for SHA-256 integrity checksums.
+The RML dataset and model checkpoints are too large for Git and live on Google Drive / an external handover drive only. Canonical source: `BIG_DATA_RAW_PROCESSED_FACE.tar.gz` filtered to RML split IDs (see [ADR 0004](docs/adr/0004-v3-restart-data-provenance-and-fidelity-gate.md) — do not use the retired `RML_RAW_PROCESSED_Face` folder). Checkpoint SHA-256 checksums are recorded in ADR 0004.
 
 ### Running
 
-The experiment is designed to run on Google Colab with a GPU runtime. Open `multimodal-causal-ablation.ipynb`, connect to a T4 or V100 instance, and execute cells sequentially. Each phase includes resume gates that detect cached intermediate results, so you don't need to re-run expensive forward passes after a runtime reset.
+The experiment is designed to run on Google Colab with a GPU runtime. Open `multimodal-causal-ablation-v3.ipynb`, connect to a T4 or V100 instance, and execute cells sequentially. Day 0 includes a halting fidelity gate — if base/fine-tuned test accuracy don't reproduce the paper's published RML numbers (76.39% / 79.86%) within tolerance, the notebook stops there rather than proceeding on unverified data.
 
 ## Lab Notebook
 
@@ -74,6 +69,7 @@ Methodology and infrastructure choices are documented as architectural decision 
 
 - [ADR 0001 — Causal Validation Methodology](docs/adr/0001-causal-validation-methodology.md): Modality selection protocol, probe thresholds, ablation parameters, and substrate outcome taxonomy.
 - [ADR 0002 — Infrastructure & Journaling Protocol](docs/adr/0002-infrastructure-and-journaling-protocol.md): Git scope, artifact storage, session lifecycle, and deterministic seed policy.
+- [ADR 0004 — V3 Restart: Data Provenance & Fidelity Gate](docs/adr/0004-v3-restart-data-provenance-and-fidelity-gate.md): Root-cause diagnosis of the v1/v2 failures, canonical data source, and the halting Day 0 fidelity gate. Supersedes both prior `0003` ADRs.
 
 ## Acknowledgments
 

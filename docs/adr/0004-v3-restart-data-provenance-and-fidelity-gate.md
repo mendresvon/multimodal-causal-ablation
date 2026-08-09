@@ -1,0 +1,35 @@
+# ADR 0004 — V3 Restart: Data Provenance, Fidelity Gate, and Retraction of Prior Ablation Numbers
+
+## Status
+Accepted. Supersedes `0003-targeting-cls-tokens-for-ablation.md` and `0003-causal-ablation-v2-methodology-remediation.md` (both retained for historical record but no longer authoritative; see Retractions below).
+
+## Context
+
+Both prior experiment attempts (`multimodal-causal-ablation.ipynb` and `multimodal-causal-ablation-v2.ipynb`) produced ablation results that don't survive scrutiny: ±30-40% per-class accuracy swings from ablating 5 of 64 neurons, sign flips, and Transfer Retention Ratios ranging from -6.96 to 57.53. A diagnosis session on 2026-08-09 (full log in `journals/2026-08-09.md`) traced this to a single root cause rather than a statistical artifact: **the notebook evaluated the correct, SHA-verified checkpoints against the wrong data.**
+
+`main.py`'s `get_dataset_iemocap` — the function that trained and evaluated every dataset in the original thesis, including RML — reads from a single merged folder, `BIG_DATA_RAW_PROCESSED_FACE/meta_one_hot_label_six_categories.pkl`, selecting each dataset's samples only by which split-file is loaded. `multimodal-causal-ablation-v2.ipynb` instead read `Model/Dig-Data_Model-Main/data/RML_RAW_PROCESSED_Face/meta.pkl` — a file that does not exist in `RML_RAW_PROCESSED_Face.tar.gz` on the handover drive (confirmed via `tar -tzf`; the archive contains only per-utterance `image_*.jpg` and `audio.wav`) and was therefore fabricated by an earlier agent session. Evaluating the correct checkpoint against fabricated/mismatched data produced base model accuracy of 56.94% and fine-tuned accuracy of 47.92%, against a true, paper-confirmed target of 76.39% and 79.86% respectively (Figure 4.3, `For Feature Analysis.pdf`; cross-checked against the exact training-time evaluation log at `Final_result/Origin_training/wrong_stat/RML_{origin,finetune}/*.txt` on the handover drive, which shows `Test (29) 0.763889` and `Test (15) 0.798611` at the epochs those checkpoints were saved).
+
+Two things that were previously flagged as suspect turned out to be correct and should not be re-litigated:
+
+- **Checkpoint identity.** `checkpoints/base_model.pt` / `finetuned_model.pt` are SHA-256-verified to be `RML_origin` / `RML_finetune` from `Final_result/Origin_training/models/` — the exact pair the thesis's RML figure reports. The `.pt` filenames encode *validation*-set metrics (0.6724, 0.7586), not test accuracy, which is why they looked mismatched against the target of 76.39/79.86 — the actual test accuracy at the saved epoch matches the paper exactly. This is a labeling-convention gap in the original researchers' file-naming, not a data problem.
+- **Ablation hook target.** `model.a_transformer(specs, spec_lens, get_cls=True)` returns the CLS-token output directly (`WrappedTransformerEncoder.forward`'s `inputs[0]`), which feeds straight into `a_out` and the fusion sum. There is no separate "FFN" layer distinct from this CLS representation. `0003-targeting-cls-tokens-for-ablation.md`'s premise (that the protocol's "FFN output" meant something different from the CLS token) was based on a misreading of the architecture; hooking `a_transformer`'s output was always correct.
+- **`strict=False` checkpoint loading.** A reimplementation-and-key-diff check (see journal) found 0 missing keys and 0 shape mismatches across every classification-relevant submodule. Loading was never silently dropping weights.
+
+## Decisions & Rationale
+
+1. **Canonical data source.** All RML activity for v3 uses `BIG_DATA_RAW_PROCESSED_FACE.tar.gz` (`/Volumes/ADATA HD710 PRO/handover/data/Processed data/`) filtered to RML utterance IDs via the split files in `data_split/all_single_label_six_category/with_valid/Final_{train,valid,test}_split_six_categories_RML.txt`, with labels and text sourced from `meta_one_hot_label_six_categories.pkl` inside that archive. The `RML_RAW_PROCESSED_Face` folder and its fabricated `meta.pkl` are retired; do not resurrect them.
+   *Blocking precondition:* RML split IDs (`s4_f5hnh_di3` style) must be confirmed as keys in `meta_one_hot_label_six_categories.pkl` before extraction proceeds — the merged corpus may have re-ID'd samples during construction, in which case an ID map is needed first.
+
+2. **Halting fidelity gate, not a warning.** Day 0 of the v3 notebook must load both checkpoints with `strict=True`, evaluate on the canonical 144-sample RML test split (not the 576-sample train+valid concatenation used for probing), and `assert` — not print a warning and continue — that base and fine-tuned test accuracy are each within 1% absolute of 76.39% / 79.86%. If the gate fails, nothing downstream runs. No permutation solver, ever: the label→index mapping is the fixed constant from `getEmotionDict()` in `datasets.py` (`{'ang':0,'dis':1,'fea':2,'hap':3,'sad':4,'sur':5}`), never fitted to match a target accuracy.
+
+3. **Falsification pair before any real sweep.** Before running the k={1,3,5,10,...} ablation sweep for real, run two control ablations: (a) ablate all 64 audio dimensions (full-modality knockout) and confirm accuracy moves substantially, and (b) ablate 5 random dimensions and confirm the drop is near zero. If either fails, the harness — not the science — is still broken.
+
+4. **Retraction of the ε=0.05 Transfer Retention screen (from the superseded `0003-causal-ablation-v2-methodology-remediation.md`).** That screen was introduced to hide division-by-zero and negative-ratio artifacts produced by the broken harness above, not to handle a genuine statistical edge case. It is withdrawn. Once v3 produces real ablation drops, revisit whether an epsilon screen is still needed on its own merits — do not reintroduce it preemptively.
+
+5. **Dominant modality framing.** `0001-causal-validation-methodology.md`'s selection of Audio (64-d) under a Text/Audio `mean(|phi|)` near-tie is retained and is consistent with the thesis's own finding ("In the RML model, the dominant modality is text and audio," §4.4). Section VI-D's write-up must state this as a near-tie resolved by a dimension-invariant tie-break, not as an unambiguous Audio win — the paper's own text would otherwise contradict the write-up.
+
+## Retractions
+
+- All numeric results from `multimodal-causal-ablation.ipynb` and `multimodal-causal-ablation-v2.ipynb` (Phase A verdicts, Phase B probe rankings, Phase C ablation sweeps, Phase D retention ratios) are retracted. None should be cited or reused; they were computed against mismatched data.
+- `docs/adr/0003-targeting-cls-tokens-for-ablation.md` is superseded — its architectural premise was incorrect, though its practical conclusion (hook `a_transformer`) happened to be right for an unrelated reason.
+- `docs/adr/0003-causal-ablation-v2-methodology-remediation.md` is superseded — its leakage-free probing and dual-SHAP-reporting decisions are still sound in principle and may be re-adopted in v3's own ADR once real data is flowing, but its ε=0.05 screen is explicitly withdrawn (see Decision 4).

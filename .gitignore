@@ -5,7 +5,7 @@
 # ---- Heavy Datasets (not tracked; see data/README.md for checksums) ----
 data/*
 !data/README.md
-Model/Dig-Data_Model-Main/data/RML_RAW_PROCESSED_Face/
+Model/Dig-Data_Model-Main/data/BIG_DATA_RAW_PROCESSED_FACE/
 
 # ---- Model Weights & SHAP Pickles (not tracked; see checkpoints/README.md) ----
 checkpoints/*.pt
@@ -17,6 +17,7 @@ Final_result/
 
 # ---- Unpublished Paper & Internal Working Documents ----
 *.docx
+*.pdf
 
 # ---- AI Agent Internals ----
 .agents/
