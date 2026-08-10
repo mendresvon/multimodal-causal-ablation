@@ -40,3 +40,7 @@ Model/Dig-Data_Model-Main/*.ipynb
 Model/Dig-Data_Model-Main/savings/
 Model/Dig-Data_Model-Main/tensorboard/
 Model/Dig-Data_Model-Main/data/*.ipynb
+
+# ---- Staged handover archive (SHA-256 pinned in the v3 notebook; ~593 MB) ----
+data_bundle/
+.runtime_data/
