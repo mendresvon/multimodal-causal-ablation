@@ -2,7 +2,7 @@
 
 ## Status
 
-Accepted, 2026-08-11. Supersedes `0005-day0-dominant-modality-recompute-and-protocol-alignment.md` Decision 7, and withdraws the substrate taxonomy in `0001-causal-validation-methodology.md` Decision 4 and in `CONTEXT.md`. Weeks 0–2 are unaffected; ADR 0004's provenance and fidelity-gate decisions and ADR 0005 Decisions 1–6 and 8 all stand.
+Accepted, 2026-08-11. **Reconstructed 2026-08-11** from the artifacts it governs, after `results/measurement_resolution.json` was found to cite "WITHDRAWN (ADR 0006)" while no such document was present in this repository, on the Drive mount, or on web Drive. The decisions below were taken during the 2026-08-11 session 2 run; this file records them from `results/week3_random_ablation_null.json`, `results/week3_transfer_retention.csv`, `results/measurement_resolution.json` and `results/week3_rank_validation.csv`. Supersedes `0005-day0-dominant-modality-recompute-and-protocol-alignment.md` Decision 7, and withdraws the substrate taxonomy in `0001-causal-validation-methodology.md` Decision 4 and in `CONTEXT.md`. Weeks 0–2 are unaffected; ADR 0004's provenance and fidelity-gate decisions and ADR 0005 Decisions 1–6 and 8 all stand.
 
 ## Context
 
@@ -43,6 +43,8 @@ A normalised or re-banded index must not be reintroduced later to rescue a trans
 **Result: 0 of 6 classes have an `R` whose 95% CI clears the null, and 0 of 6 fall below it.** Every per-class verdict is `No transfer signal above random ablation`. The base model's top-5 neurons, ablated inside the fine-tuned model, do no more damage than five arbitrary audio dimensions.
 
 Fear is the class most likely to be mistaken for a signal and is the clearest illustration of why the null was needed. Its `R` of 4.34 is by far the largest, and under either band scheme it would have been the strongest Preservation case in the table. Its null is 4.01. The ratio is large because fear's base drop is 0.6387 pp — a small denominator inflates the ratio for random subsets exactly as it does for the selected ones. Its `R_defined_fraction_of_draws` is 0.99, the only class below 1.0, which is the same fragility showing up in the bootstrap.
+
+Happiness fails in the opposite direction and should be reported as such. Its `R` of 1.3926 has a 95% CI of [0.7825, 2.3622], whose lower bound is below 1. That interval is consistent with the fine-tuned model taking *less* damage than the base model under the same ablation, so happiness is the one class where even the raw ratio, before any comparison to the null, carries no directional information. It is also the class with an observed top-5 overlap of 0.
 
 ### 3. The write-up must state that all six point estimates sit above their null
 
