@@ -291,9 +291,7 @@ class IEMOCAP(Dataset):
             @interval - how many ms per image frame
             @fps - fps of the original video
         '''
-        files = glob.glob(f'{folder}/*')
-        # nums = (len(files) - 5) // 2
-        nums = len(files) - 2
+        nums = len(glob.glob(f'{folder}/image_*.jpg'))
         # if nums < 120:
         #     # step = int(self.img_interval / 1000 * fps)
         #     sampled = [os.path.join(folder, f'image_{i}.jpg') for i in list(range(0, nums, 2))]
