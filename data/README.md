@@ -7,10 +7,6 @@ The RML data used by this project is too large for Git and is stored on Google D
 - **RML subset:** selected via `Model/Dig-Data_Model-Main/data/data_split/all_single_label_six_category/with_valid/Final_{train,valid,test}_split_six_categories_RML.txt` (518 / 58 / 144 samples).
 - **Location expected by the v3 notebook:** `Model/Dig-Data_Model-Main/data/BIG_DATA_RAW_PROCESSED_FACE/` (containing the per-utterance folders + `meta_one_hot_label_six_categories.pkl`).
 
-## Do not use
-
-`RML_RAW_PROCESSED_Face.tar.gz` / the `RML_RAW_PROCESSED_Face/` folder is **retired**. Its `meta.pkl` was fabricated by an earlier agent session and does not exist in that archive's actual contents — evaluating the correct model checkpoints against it produced the garbage results diagnosed in `journals/2026-08-09-session1.md`.
-
 ## Verification
 
 After extraction, confirm:
@@ -23,3 +19,12 @@ Model/Dig-Data_Model-Main/data/
         └── audio.wav
 ```
 The v3 notebook's Day 0 cell asserts that all 518+58+144 RML split IDs are keys in the meta file before proceeding — if that assertion fails, the extraction is incomplete or wrong.
+
+## Do not use the archive's own meta.pkl
+
+`RML_RAW_PROCESSED_Face.tar.gz` supplies the per-utterance `image_*.jpg` and
+`audio.wav` files and nothing else. Its bundled `meta.pkl` is genuine but is not
+usable here: its utterance IDs are a separate namespace (`s1_an1`) that does not
+intersect the split files' IDs, and its labels are strings rather than one-hot
+vectors. The notebook deletes it right after extraction. Labels and text always
+come from `meta_one_hot_label_six_categories.pkl`. See ADR 0004 Decision 1.
