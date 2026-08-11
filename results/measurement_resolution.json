@@ -1,0 +1,21 @@
+{
+  "eval_split": "test",
+  "n_eval_samples": 144,
+  "samples_per_class": 24,
+  "argmax_accuracy_resolution_pp": 4.166666666666667,
+  "primary_measure": "mean true-class softmax probability drop (pp), paired class-stratified bootstrap, 95% CI",
+  "bootstrap_draws": 2000,
+  "bootstrap_seed": 20260811,
+  "ratio_denominator_floor_pp": 0.1,
+  "ratio_denominator_rule": "The selectivity denominator is used only when at least one non-target class has an effect whose CI excludes zero AND the mean absolute non-target effect clears the floor above. Otherwise the ratio is NaN with a stated reason. No epsilon is ever substituted for a denominator.",
+  "selectivity_threshold": 2.5,
+  "note": "The floor is a chosen constant; the sweep cell prints the observed distribution of denominators against it so it can be calibrated on real data.",
+  "transfer_null": {
+    "n_random_subsets": 2000,
+    "k": 5,
+    "seed": 20260812,
+    "estimator": "ratio of mean fine-tuned drop to mean base drop over random k-dimension subsets; CI by bootstrap over subsets"
+  },
+  "substrate_bands": "WITHDRAWN (ADR 0006). Both CONTEXT.md and ADR 0001 band only R <= 1 and collapse all of R > 1 into Preservation, which is the region every class occupies. R is reported with its CI against the random-ablation null instead.",
+  "top5_overlap_null": "Hypergeometric(64, 5, 5); expected overlap 0.3906; an overlap of 1 has p=0.343."
+}
