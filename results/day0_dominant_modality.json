@@ -1,0 +1,61 @@
+{
+  "dominant_modality": "audio",
+  "per_model": {
+    "base": {
+      "n_samples": 144,
+      "aggregate_mass_sum_abs_phi": {
+        "text": 0.2584863602746267,
+        "video": 0.01056119982268936,
+        "audio": 0.08422823580698716
+      },
+      "per_neuron_mean_abs_phi": {
+        "text": 0.0002524280862056901,
+        "video": 0.00016501874722952124,
+        "audio": 0.0013160661844841743
+      },
+      "per_neuron_ranking": [
+        "audio",
+        "text",
+        "video"
+      ],
+      "per_neuron_margin_over_runner_up": 5.213628183243375,
+      "audio_share_of_total_mass": 0.2384206242926511,
+      "per_class_per_neuron_winner": {
+        "anger": "audio",
+        "disgust": "audio",
+        "fear": "audio",
+        "happiness": "audio",
+        "sadness": "audio",
+        "surprise": "audio"
+      }
+    },
+    "finetuned": {
+      "n_samples": 144,
+      "aggregate_mass_sum_abs_phi": {
+        "text": 0.2652526856714005,
+        "video": 0.006042072227957817,
+        "audio": 0.1149945080706435
+      },
+      "per_neuron_mean_abs_phi": {
+        "text": 0.00025903582585097703,
+        "video": 9.440737856184088e-05,
+        "audio": 0.0017967891886038047
+      },
+      "per_neuron_ranking": [
+        "audio",
+        "text",
+        "video"
+      ],
+      "per_neuron_margin_over_runner_up": 6.936450518769149,
+      "audio_share_of_total_mass": 0.2976901462221155,
+      "per_class_per_neuron_winner": {
+        "anger": "audio",
+        "disgust": "audio",
+        "fear": "audio",
+        "happiness": "audio",
+        "sadness": "audio",
+        "surprise": "audio"
+      }
+    }
+  }
+}

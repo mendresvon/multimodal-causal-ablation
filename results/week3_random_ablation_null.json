@@ -1,0 +1,57 @@
+{
+  "n_subsets": 2000,
+  "k": 5,
+  "seed": 20260812,
+  "bootstrap_draws": 2000,
+  "estimator": "ratio of means over subsets; CI by bootstrap over subsets",
+  "per_class": {
+    "anger": {
+      "null_base_drop_pp": 1.3396758684301135,
+      "null_ft_drop_pp": 1.8956783379575768,
+      "R_null": 1.4150276067740246,
+      "R_null_ci95_lo": 1.399274811980267,
+      "R_null_ci95_hi": 1.4310865366410341,
+      "reason": null
+    },
+    "disgust": {
+      "null_base_drop_pp": 1.1363753945013222,
+      "null_ft_drop_pp": 2.278465736605363,
+      "R_null": 2.005029101853465,
+      "R_null_ci95_lo": 1.9879394131822135,
+      "R_null_ci95_hi": 2.023198441989831,
+      "reason": null
+    },
+    "fear": {
+      "null_base_drop_pp": 0.3631005246862536,
+      "null_ft_drop_pp": 1.455762714895,
+      "R_null": 4.009255332673754,
+      "R_null_ci95_lo": 3.8998541391900363,
+      "R_null_ci95_hi": 4.136255931921535,
+      "reason": null
+    },
+    "happiness": {
+      "null_base_drop_pp": 1.078178041004634,
+      "null_ft_drop_pp": 1.2778145481299212,
+      "R_null": 1.185160984116564,
+      "R_null_ci95_lo": 1.1590917874641216,
+      "R_null_ci95_hi": 1.2108142783651532,
+      "reason": null
+    },
+    "sadness": {
+      "null_base_drop_pp": 1.6343735779552149,
+      "null_ft_drop_pp": 1.9731610309806373,
+      "R_null": 1.2072888705465268,
+      "R_null_ci95_lo": 1.1950848904636309,
+      "R_null_ci95_hi": 1.219504054157067,
+      "reason": null
+    },
+    "surprise": {
+      "null_base_drop_pp": 0.703742879278247,
+      "null_ft_drop_pp": 1.2143457106872828,
+      "R_null": 1.7255531053226514,
+      "R_null_ci95_lo": 1.7080058166557075,
+      "R_null_ci95_hi": 1.74350183601384,
+      "reason": null
+    }
+  }
+}
