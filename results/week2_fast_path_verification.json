@@ -5,19 +5,19 @@
       "slow_overall": 76.38888888888889,
       "fast_overall": 76.38888888888889,
       "max_per_class_delta_pp": 0.0,
-      "max_abs_prob_delta": 1.4507163226262776e-07
+      "max_abs_prob_delta": 7.657161011948022e-06
     },
     "full 64-dim knockout": {
       "slow_overall": 56.25,
       "fast_overall": 56.25,
       "max_per_class_delta_pp": 0.0,
-      "max_abs_prob_delta": 4.724155555635434e-08
+      "max_abs_prob_delta": 9.429803662447389e-06
     },
     "disgust top-5 (k=5)": {
       "slow_overall": 75.69444444444444,
       "fast_overall": 75.69444444444444,
       "max_per_class_delta_pp": 0.0,
-      "max_abs_prob_delta": 1.2142779809432014e-07
+      "max_abs_prob_delta": 8.094487806281636e-06
     }
   },
   "prob_order_tolerance": 0.001
