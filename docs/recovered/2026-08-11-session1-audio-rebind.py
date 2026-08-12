@@ -1,5 +1,5 @@
 # RECOVERED 2026-08-12 from Claude Code transcript
-#   ~/.claude/projects/-Users-breznev-Library-CloudStorage-GoogleDrive-mendresvon-gmail-com-My-Drive-multimodal-causal-ablation/5a63c52a-e6c7-40c9-b578-7fbe5bbfc3b8.jsonl
+#   ~/.claude/projects/-Users-breznev-Library-CloudStorage-GoogleDrive-<account>-My-Drive-multimodal-causal-ablation/5a63c52a-e6c7-40c9-b578-7fbe5bbfc3b8.jsonl
 #
 # This block lived in the "Day 0: Canonical Data Load + Halting Fidelity Gate" cell of
 # multimodal-causal-ablation-v3.ipynb between commits d08a914/4b6e008 and 1d5aa39

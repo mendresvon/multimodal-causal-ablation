@@ -1,3 +1,18 @@
+> ## ⚠️ Vendored third-party code — not written by this repository's author
+>
+> This directory is the upstream MME2E implementation, vendored unmodified into the
+> [neuron-level causal validation](../../README.md) project so the RML checkpoints load
+> against the exact code that trained them. The README below is the original authors'.
+>
+> **What the parent project actually uses:** `src/datasets.py` (the `IEMOCAP` class and
+> `collate_fn`), `src/models/e2e.py` (`MME2E`), and three RML split files under
+> `data/data_split/all_single_label_six_category/with_valid/`. `main.py` is retained
+> because `docs/provenance/` archives its stdout as the source of the fidelity-gate targets.
+>
+> Upstream splits for the other five corpora, the `older_split/` directory and the
+> `hyphothesis_*` directories were removed as unused. Recover them from the upstream
+> repository if needed.
+
 # Multimodal End-to-End Sparse Model for Emotion Recognition
 
 [![](https://img.shields.io/badge/python-3.6+-blue.svg)](https://www.python.org/downloads/) [![CC BY 4.0][cc-by-shield]][cc-by]

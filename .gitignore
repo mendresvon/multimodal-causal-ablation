@@ -21,6 +21,7 @@ Final_result/
 
 # ---- AI Agent Internals ----
 .agents/
+.claude/
 skills-lock.json
 
 # ---- Internal Journal Guidelines (not for public review) ----
@@ -29,9 +30,15 @@ journals/GUIDELINES.md
 # ---- OS & IDE Artifacts ----
 .DS_Store
 __MACOSX/
+._*
 *.pyc
 __pycache__/
 .ipynb_checkpoints/
+
+# ---- Local Python Environments ----
+.venv/
+venv/
+env/
 
 # ---- Legacy Upstream Notebooks (not part of Section VI-D) ----
 Model/Dig-Data_Model-Main/*.ipynb
