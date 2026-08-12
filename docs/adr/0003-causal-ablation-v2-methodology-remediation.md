@@ -3,7 +3,10 @@
 We decided on four critical architectural and methodological refinements for the `multimodal-causal-ablation-v2.ipynb` pipeline to eliminate data leakage, resolve mathematical edge-case artifacts, establish publication-grade attribution reporting, and explicitly address representation polysemanticity.
 
 ## Status
-Accepted
+
+**Superseded by [ADR 0004](0004-v3-restart-data-provenance-and-fidelity-gate.md).** Retained as history.
+
+Two records were written under the number 0003 on different days; this is the later one. Decision 1 (dual SHAP reporting, `mean(|phi|)` as the selection criterion) survives and is carried forward by ADR 0005. The ε=0.05 Transfer Retention screen is explicitly retracted by ADR 0004 Decision 4 — it was hiding division-by-zero and negative-ratio artifacts produced by a broken harness rather than handling a real statistical edge case. Every number computed under this ADR is retracted.
 
 ## Decisions & Rationale
 
