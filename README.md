@@ -74,7 +74,7 @@ Every one of these is checked for existence, and where possible for identity, by
 
 ### Running
 
-The experiment is designed to run on Google Colab with a GPU runtime. Open `multimodal-causal-ablation-v3.ipynb`, connect to a T4 or V100 instance, and execute cells sequentially from the top.
+The experiment is designed to run on Google Colab with a GPU runtime. Open `multimodal-causal-ablation-v3.ipynb`, connect to at least a T4 GPU instance, and execute cells sequentially from the top. It will run into some errors because of colab environment conflicts/issues. If that happens, I just restart colab session and run go through all cells again.
 
 Day 0 is a sequence of halting gates, in this order. Each one stops the notebook rather than warning and continuing:
 
