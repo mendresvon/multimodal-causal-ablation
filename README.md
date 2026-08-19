@@ -1,13 +1,13 @@
 # Neuron-Level Causal Validation of Modality Competition in Multimodal Emotion Recognition
 
 > **Complete and closed as of 2026-08-19.** The experiment ran to a definite answer, and this
-> repository is its finished record — read-only, not paused. Active work has moved to the
+> repository is its finished record: read-only, not paused. Active work has moved to the
 > successor repository [`neuron-feature-mapping`](https://github.com/mendresvon/neuron-feature-mapping).
 > [FROZEN.md](FROZEN.md) records what moved where and why.
 
 This repository contains my implementation of Section VI-D for a paper on transfer learning effects in multimodal emotion recognition, co-authored with Prof. KC Lan and Tsung-Yi Ko. The central question: when a multimodal model learns to recognize emotions from audio, text, and video simultaneously, does it develop specialized neurons for the modality it relies on most, and do those neurons survive fine-tuning?
 
-> **Note on running this yourself.** The dataset, checkpoints and SHAP pickles are not in this repository — they are ~1.5 GB and live on Google Drive and an external handover drive. Without them the notebook halts at Day 0 by design. What is reproducible from a clone alone: the methodology (ADRs), the recorded results (`results/`), and the full experimental record (`journals/`). See [Reproducibility](#reproducibility).
+> **Note on running this yourself.** The dataset, checkpoints and SHAP pickles are not in this repository: they are ~1.5 GB and live on Google Drive and an external handover drive. Without them the notebook halts at Day 0 by design. What is reproducible from a clone alone: the methodology (ADRs), the recorded results (`results/`), and the full experimental record (`journals/`). See [Reproducibility](#reproducibility).
 
 ## Result
 
@@ -15,13 +15,13 @@ The experiment posed two questions and answered both. It is finished as an exper
 
 **1. Are a class's top audio neurons causally load-bearing for that class? Yes.** Mean-ablating each probe-selected top-five set shifts target-class confidence in every one of the twelve class × model cells, and all twelve nominal target intervals exclude zero (Tables [VII and VIII](docs/vi-d-paper-writeup-guidance.md)). Concentration is heterogeneous rather than uniform: 4 of 6 base rows and 3 of 6 fine-tuned rows clear the inherited 2.5 selectivity ratio.
 
-**2. Do those neurons stay load-bearing through fine-tuning — is there a shared substrate? No.** Ablating the base model's top-five sets inside the fine-tuned model does no more damage than ablating five arbitrary audio dimensions. Against a measured 2000-subset random-ablation null, 0 of 6 classes clear it and 0 of 6 fall below it. Every per-class verdict is *no transfer signal above random ablation*. Full detail in [ADR 0006](docs/adr/0006-week3-transfer-null-and-band-withdrawal.md).
+**2. Do those neurons stay load-bearing through fine-tuning: is there a shared substrate? No.** Ablating the base model's top-five sets inside the fine-tuned model does no more damage than ablating five arbitrary audio dimensions. Against a measured 2000-subset random-ablation null, 0 of 6 classes clear it and 0 of 6 fall below it. Every per-class verdict is *no transfer signal above random ablation*. Full detail in [ADR 0006](docs/adr/0006-week3-transfer-null-and-band-withdrawal.md).
 
-Question 2 is the one this section was built to settle, and the answer is negative. That negative is the deliverable, not a shortfall. It is measured against a null constructed for the purpose rather than against a threshold chosen in advance, it reproduced exactly on an independent cold re-run, and it is why the preservation-versus-reassignment taxonomy was withdrawn instead of being reported — the taxonomy would have labelled all six classes *Preserved* on an artifact of the fine-tuned model's global fragility. Ruling that reading out is the substantive contribution.
+Question 2 is the one this section was built to settle, and the answer is negative. That negative is the deliverable, not a shortfall. It is measured against a null constructed for the purpose rather than against a threshold chosen in advance, it reproduced exactly on an independent cold re-run, and it is why the preservation-versus-reassignment taxonomy was withdrawn instead of being reported: the taxonomy would have labelled all six classes *Preserved* on an artifact of the fine-tuned model's global fragility. Ruling that reading out is the substantive contribution.
 
 Stated at the strength the evidence carries, the finding is *no detected cross-model transfer signal above random ablation under this analysis*, which is not proof of absence. The claims ladder in [`docs/section-vi-d-professor-briefing.md`](docs/section-vi-d-professor-briefing.md) fixes the defensible wording for every claim in Section VI-D and lists the phrasings to avoid.
 
-**Review outcome, 2026-08-19.** Prof. KC Lan rejected Table IX — the cross-model coordinate transfer result — on the grounds that the transfer claim does not add meaning to the paper, and assigned a replacement direction rather than a fix. The rejection was editorial, not methodological: what was declined was carrying a null transfer claim into the paper, not the correctness of the measurement. Tables VII and VIII stand. The replacement direction asks whether the causally validated neuron sets correspond to physiologically grounded emotion markers (eGeMAPS for audio, FACS for video); that work is not in this repository. It was specified in [`docs/facs-egemaps-experiment-spec.md`](docs/facs-egemaps-experiment-spec.md), superseded by a fuller plan, and now lives in `neuron-feature-mapping`.
+**Review outcome, 2026-08-19.** Prof. KC Lan rejected Table IX, the cross-model coordinate transfer result, because the transfer claim does not add meaning to the paper. He assigned a replacement direction rather than a fix. The rejection was editorial, not methodological. The measurement is correct, but the null transfer claim will not be carried into the paper. Tables VII and VIII stand. The replacement direction asks whether the causally validated neuron sets correspond to physiologically grounded emotion markers (eGeMAPS for audio, FACS for video); that work is not in this repository. It was specified in [`docs/facs-egemaps-experiment-spec.md`](docs/facs-egemaps-experiment-spec.md), superseded by a fuller plan, and now lives in `neuron-feature-mapping`.
 
 One editorial item was never completed here: the Section VI-D prose for the IEEE submission. The tables and figures are filled from real artifacts; four prose blocks and two table headers were left unwritten. See the Week 4 row below.
 
@@ -33,32 +33,32 @@ My contribution is the causal test. I identify the specific neurons responsible 
 
 ## Methodology
 
-The experiment follows the four-week protocol Prof. KC Lan supplied (`experiment_protocol[From Prof KC Lan].docx`, not tracked — unpublished working document), with methodology decisions recorded in [ADR 0001](docs/adr/0001-causal-validation-methodology.md). `multimodal-causal-ablation-v3.ipynb` is organised by that protocol's Day/Week schedule:
+The experiment follows the four-week protocol Prof. KC Lan supplied (`experiment_protocol[From Prof KC Lan].docx`, not tracked: unpublished working document), with methodology decisions recorded in [ADR 0001](docs/adr/0001-causal-validation-methodology.md). `multimodal-causal-ablation-v3.ipynb` is organised by that protocol's Day/Week schedule:
 
-- **Day 0 — Setup & gates:** Verify checkpoint identity by SHA-256; confirm every data file the loader will read exists; reproduce the paper's published RML test accuracy from the canonical data source or halt; identify the dominant modality from DeepSHAP attribution; prove the ablation hook has a real, appropriately scaled causal effect using a full-modality knockout and a random-neuron control.
-- **Week 1 (Days 1–5) — Activation extraction & neuron ranking:** Cache the dominant modality's CLS activations for every sample under both models, fit L1-penalized logistic probes per emotion class on the train split only, and sanity-check them on the held-out test split.
-- **Week 2 (Days 6–10) — Causal ablation:** Replace the top-k most class-selective neurons with their train-set mean activations during inference. A target-class drop of at least 2.5× the mean absolute non-target drop marks those neurons as causally class-selective rather than merely correlated.
-- **Week 3 (Days 11–15) — Preservation vs. reassignment:** Compare per-class selectivity vectors between models by cosine similarity, then run the decisive test: ablate the base model's top neurons inside the fine-tuned model and compute the Transfer Retention Ratio against a measured random-ablation null rather than a fixed threshold ([ADR 0006](docs/adr/0006-week3-transfer-null-and-band-withdrawal.md)).
-- **Week 4 (Days 16–21+) — Write-up:** Publication tables and figures, then the Section VI-D text for the IEEE submission.
+- **Day 0: Setup & gates:** Verify checkpoint identity by SHA-256; confirm every data file the loader will read exists; reproduce the paper's published RML test accuracy from the canonical data source or halt; identify the dominant modality from DeepSHAP attribution; prove the ablation hook has a real, appropriately scaled causal effect using a full-modality knockout and a random-neuron control.
+- **Week 1 (Days 1–5): Activation extraction & neuron ranking:** Cache the dominant modality's CLS activations for every sample under both models, fit L1-penalized logistic probes per emotion class on the train split only, and sanity-check them on the held-out test split.
+- **Week 2 (Days 6–10): Causal ablation:** Replace the top-k most class-selective neurons with their train-set mean activations during inference. A target-class drop of at least 2.5× the mean absolute non-target drop marks those neurons as causally class-selective rather than merely correlated.
+- **Week 3 (Days 11–15): Preservation vs. reassignment:** Compare per-class selectivity vectors between models by cosine similarity, then run the decisive test: ablate the base model's top neurons inside the fine-tuned model and compute the Transfer Retention Ratio against a measured random-ablation null rather than a fixed threshold ([ADR 0006](docs/adr/0006-week3-transfer-null-and-band-withdrawal.md)).
+- **Week 4 (Days 16–21+): Write-up:** Publication tables and figures, then the Section VI-D text for the IEEE submission.
 
 ## Status by protocol stage
 
 | Protocol stage | Status | Summary |
 | :--- | :--- | :--- |
-| Day 0 — Setup & gates | ✅ PASSED | Checkpoint SHA, data integrity, fidelity (76.39% / 79.86%, both exact) and falsification pair all pass; reproduced from a cold run on 2026-08-12 |
-| Day 0 step 2 — Dominant modality | ✅ RECOMPUTED | Audio, unanimous across 6 classes × 2 models on per-neuron `mean(\|φ\|)` (5.2× / 6.9× over text). Not a tie — see [ADR 0005](docs/adr/0005-day0-dominant-modality-recompute-and-protocol-alignment.md) |
-| Week 1 — Activations & probes | ✅ COMPLETE | CLS activations cached, L1-logistic probes fit and sanity-checked on held-out test split (`results/week1_probe_auc.json`) |
-| Week 2 — Causal ablation | ✅ COMPLETE | Mean-ablation sweep run for both models (`results/week2_{base,finetuned}_ablation_sweep.json`). Probability drop, not accuracy, is the primary measure: the 144-sample test split quantizes accuracy to 4.17pp steps, coarser than every measured effect |
-| Week 3 — Transfer retention | ✅ COMPLETE — negative result | Substrate bands withdrawn; tested against a measured random-ablation null instead, and 0 of 6 classes clear it. Report as "no transfer signal above random ablation," never as shared substrate ([ADR 0006](docs/adr/0006-week3-transfer-null-and-band-withdrawal.md)) |
-| Week 4 — Results & paper integration | ✅ TABLES COMPLETE — prose pending | Tables VII–X filled from real artifacts in [`docs/vi-d-paper-writeup-guidance.md`](docs/vi-d-paper-writeup-guidance.md). No measurement is outstanding. What was never completed here is editorial: 4 unwritten prose blocks, 2 table headers need rewording. The Table IX caption and Section IV-C alignment items are moot — Table IX was scratched on review |
+| Day 0: Setup & gates | ✅ PASSED | Checkpoint SHA, data integrity, fidelity (76.39% / 79.86%, both exact) and falsification pair all pass; reproduced from a cold run on 2026-08-12 |
+| Day 0 step 2: Dominant modality | ✅ RECOMPUTED | Audio, unanimous across 6 classes × 2 models on per-neuron `mean(\|φ\|)` (5.2× / 6.9× over text). Not a tie: see [ADR 0005](docs/adr/0005-day0-dominant-modality-recompute-and-protocol-alignment.md) |
+| Week 1: Activations & probes | ✅ COMPLETE | CLS activations cached, L1-logistic probes fit and sanity-checked on held-out test split (`results/week1_probe_auc.json`) |
+| Week 2: Causal ablation | ✅ COMPLETE | Mean-ablation sweep run for both models (`results/week2_{base,finetuned}_ablation_sweep.json`). Probability drop, not accuracy, is the primary measure: the 144-sample test split quantizes accuracy to 4.17pp steps, coarser than every measured effect |
+| Week 3: Transfer retention | ✅ COMPLETE: negative result | Substrate bands withdrawn; tested against a measured random-ablation null instead, and 0 of 6 classes clear it. Report as "no transfer signal above random ablation," never as shared substrate ([ADR 0006](docs/adr/0006-week3-transfer-null-and-band-withdrawal.md)) |
+| Week 4: Results & paper integration | ✅ TABLES COMPLETE: prose pending | Tables VII–X filled from real artifacts in [`docs/vi-d-paper-writeup-guidance.md`](docs/vi-d-paper-writeup-guidance.md). No measurement is outstanding. What was never completed here is editorial: 4 unwritten prose blocks, 2 table headers need rewording. The Table IX caption and Section IV-C alignment items are moot: Table IX was scratched on review |
 
 ### How the current numbers were arrived at
 
-**2026-08-09 — restart.** All prior numbers, from both `multimodal-causal-ablation.ipynb` and `-v2.ipynb`, are retracted. The notebook had been evaluating correct, SHA-verified checkpoints against a fabricated `meta.pkl` rather than the canonical merged-corpus data source. Diagnosis in [ADR 0004](docs/adr/0004-v3-restart-data-provenance-and-fidelity-gate.md) and [`journals/2026-08-09-session1.md`](journals/2026-08-09-session1.md); the subsequent hardening and protocol re-alignment in [ADR 0005](docs/adr/0005-day0-dominant-modality-recompute-and-protocol-alignment.md) and [`journals/2026-08-09-session2.md`](journals/2026-08-09-session2.md).
+**2026-08-09: restart.** All prior numbers, from both `multimodal-causal-ablation.ipynb` and `-v2.ipynb`, are retracted. The notebook had been evaluating correct, SHA-verified checkpoints against a fabricated `meta.pkl` rather than the canonical merged-corpus data source. Diagnosis in [ADR 0004](docs/adr/0004-v3-restart-data-provenance-and-fidelity-gate.md) and [`journals/2026-08-09-session1.md`](journals/2026-08-09-session1.md); the subsequent hardening and protocol re-alignment in [ADR 0005](docs/adr/0005-day0-dominant-modality-recompute-and-protocol-alignment.md) and [`journals/2026-08-09-session2.md`](journals/2026-08-09-session2.md).
 
-**2026-08-11 — v3 run to completion.** Weeks 1–4 ran end to end on real data. Every class's raw transfer ratio sat above 1 under any band scheme, which initially looked like preservation but turned out to be the default state of a more-fragile fine-tuned model. Against a measured null, 0 of 6 classes clear it. See [`journals/2026-08-11-session2.md`](journals/2026-08-11-session2.md) and [`session3`](journals/2026-08-11-session3.md).
+**2026-08-11: v3 run to completion.** Weeks 1–4 ran end to end on real data. Every class's raw transfer ratio sat above 1 under any band scheme, which initially looked like preservation but turned out to be the default state of a more-fragile fine-tuned model. Against a measured null, 0 of 6 classes clear it. See [`journals/2026-08-11-session2.md`](journals/2026-08-11-session2.md) and [`session3`](journals/2026-08-11-session3.md).
 
-**2026-08-12 — reproduction check.** The whole notebook was re-run from committed code. The fidelity gate passed exactly, 8 of 9 tracked artifacts came back byte-identical and the 9th differed only by GPU float noise, and both Week 3 negative results reproduced exactly. See [`journals/2026-08-12-session1.md`](journals/2026-08-12-session1.md).
+**2026-08-12: reproduction check.** The whole notebook was re-run from committed code. The fidelity gate passed exactly, 8 of 9 tracked artifacts came back byte-identical and the 9th differed only by GPU float noise, and both Week 3 negative results reproduced exactly. See [`journals/2026-08-12-session1.md`](journals/2026-08-12-session1.md).
 
 ## Repository layout
 
@@ -123,13 +123,13 @@ Colab's preinstalled packages conflict with the pinned PyTorch 2.2.2 often enoug
 
 Day 0 is a sequence of halting gates, in this order. Each stops the notebook rather than warning and continuing. All five passed on the 2026-08-12 cold run:
 
-1. **Checkpoint identity** — SHA-256 of both `.pt` files must match ADR 0004's recorded hashes.
-2. **Data integrity** — every `audio.wav` and every video frame path the loader will construct must exist across all 720 folders, with no stray files that would shift the frame count.
-3. **Fidelity** — both checkpoints must reproduce 76.39% / 79.86% test accuracy within 1 percentage point. There is no label-permutation solver; the label order is the fixed constant from `getEmotionDict()`.
-4. **Dominant modality** — recomputed from the DeepSHAP pickles, required to rank audio first per neuron for every class in both models.
-5. **Falsification pair** — a mechanical proof that the ablation hook writes through, then a full-64 knockout (must move accuracy) and a random-5 control (must not).
+1. **Checkpoint identity**: SHA-256 of both `.pt` files must match ADR 0004's recorded hashes.
+2. **Data integrity**: every `audio.wav` and every video frame path the loader will construct must exist across all 720 folders, with no stray files that would shift the frame count.
+3. **Fidelity**: both checkpoints must reproduce 76.39% / 79.86% test accuracy within 1 percentage point. There is no label-permutation solver; the label order is the fixed constant from `getEmotionDict()`.
+4. **Dominant modality**: recomputed from the DeepSHAP pickles, required to rank audio first per neuron for every class in both models.
+5. **Falsification pair**: a mechanical proof that the ablation hook writes through, then a full-64 knockout (must move accuracy) and a random-5 control (must not).
 
-If a cell halts, read its message before changing anything. Each `HALT` states what to check and, where relevant, what *not* to assume — a Colab Drive-mount glitch looks exactly like missing data.
+If a cell halts, read its message before changing anything. Each `HALT` states what to check and, where relevant, what *not* to assume: a Colab Drive-mount glitch looks exactly like missing data.
 
 ## Lab notebook
 
@@ -143,12 +143,12 @@ The last entry, [`2026-08-19-session1.md`](journals/2026-08-19-session1.md), clo
 
 Methodology and infrastructure choices are recorded as architectural decision records in [`docs/adr/`](docs/adr/):
 
-- **[ADR 0001](docs/adr/0001-causal-validation-methodology.md)** — Causal validation methodology: modality selection, probe thresholds, ablation parameters, substrate outcome taxonomy.
-- **[ADR 0002](docs/adr/0002-infrastructure-and-journaling-protocol.md)** — Infrastructure and journaling: Git scope, artifact storage, session lifecycle, deterministic seed policy.
-- **ADR 0003** — Two records were written under this number on different days (`0003-targeting-cls-tokens-for-ablation.md` and `0003-causal-ablation-v2-methodology-remediation.md`). Both are superseded by ADR 0004 and retained only as history. The numbering collision is left as-is rather than rewritten.
-- **[ADR 0004](docs/adr/0004-v3-restart-data-provenance-and-fidelity-gate.md)** — V3 restart: root-cause diagnosis of the v1/v2 failures, canonical data source, halting Day 0 fidelity gate. Supersedes both 0003 records.
-- **[ADR 0005](docs/adr/0005-day0-dominant-modality-recompute-and-protocol-alignment.md)** — Dominant-modality recompute, Day/Week protocol alignment, frame-path integrity gate, exact fast path for Weeks 2–3, and resolution of the ADR 0001 / `CONTEXT.md` taxonomy conflict. Extends ADR 0004.
-- **[ADR 0006](docs/adr/0006-week3-transfer-null-and-band-withdrawal.md)** — Withdraws the Week 3 substrate-preservation bands, replaces them with a measured random-ablation null, and switches the primary measure from argmax accuracy to probability drop.
+- **[ADR 0001](docs/adr/0001-causal-validation-methodology.md)**: Causal validation methodology: modality selection, probe thresholds, ablation parameters, substrate outcome taxonomy.
+- **[ADR 0002](docs/adr/0002-infrastructure-and-journaling-protocol.md)**: Infrastructure and journaling: Git scope, artifact storage, session lifecycle, deterministic seed policy.
+- **ADR 0003**: Two records were written under this number on different days (`0003-targeting-cls-tokens-for-ablation.md` and `0003-causal-ablation-v2-methodology-remediation.md`). Both are superseded by ADR 0004 and retained only as history. The numbering collision is left as-is rather than rewritten.
+- **[ADR 0004](docs/adr/0004-v3-restart-data-provenance-and-fidelity-gate.md)**: V3 restart: root-cause diagnosis of the v1/v2 failures, canonical data source, halting Day 0 fidelity gate. Supersedes both 0003 records.
+- **[ADR 0005](docs/adr/0005-day0-dominant-modality-recompute-and-protocol-alignment.md)**: Dominant-modality recompute, Day/Week protocol alignment, frame-path integrity gate, exact fast path for Weeks 2–3, and resolution of the ADR 0001 / `CONTEXT.md` taxonomy conflict. Extends ADR 0004.
+- **[ADR 0006](docs/adr/0006-week3-transfer-null-and-band-withdrawal.md)**: Withdraws the Week 3 substrate-preservation bands, replaces them with a measured random-ablation null, and switches the primary measure from argmax accuracy to probability drop.
 
 ## Acknowledgments
 
