@@ -1,17 +1,29 @@
 # Neuron-Level Causal Validation of Modality Competition in Multimodal Emotion Recognition
 
-> **This repository is frozen — read-only as of 2026-08-19.** Section VI-D is finished as an
-> experiment, and active work has moved to the successor repository
-> [`neuron-feature-mapping`](https://github.com/mendresvon/neuron-feature-mapping). Nothing here
-> is being updated. [FROZEN.md](FROZEN.md) records what moved where and why.
+> **Complete and closed as of 2026-08-19.** The experiment ran to a definite answer, and this
+> repository is its finished record — read-only, not paused. Active work has moved to the
+> successor repository [`neuron-feature-mapping`](https://github.com/mendresvon/neuron-feature-mapping).
+> [FROZEN.md](FROZEN.md) records what moved where and why.
 
 This repository contains my implementation of Section VI-D for a paper on transfer learning effects in multimodal emotion recognition, co-authored with Prof. KC Lan and Tsung-Yi Ko. The central question: when a multimodal model learns to recognize emotions from audio, text, and video simultaneously, does it develop specialized neurons for the modality it relies on most, and do those neurons survive fine-tuning?
 
-**Final status, 2026-08-19.** The experiment is complete and the headline answer is negative: the base model's top neurons do no more damage inside the fine-tuned model than arbitrary neurons do. Full detail in [ADR 0006](docs/adr/0006-week3-transfer-null-and-band-withdrawal.md).
-
-On review, Prof. KC Lan rejected Table IX — the cross-model coordinate transfer result — on the grounds that the transfer claim does not add meaning to the paper, and assigned a replacement direction rather than a fix. Tables VII and VIII stand. The replacement direction asks whether the causally validated neuron sets correspond to physiologically grounded emotion markers (eGeMAPS for audio, FACS for video); that work is not in this repository. It was specified in [`docs/facs-egemaps-experiment-spec.md`](docs/facs-egemaps-experiment-spec.md), superseded by a fuller plan, and now lives in `neuron-feature-mapping`. The Section VI-D prose for the IEEE submission was still unfinished when this repository was frozen — see the Week 4 row below for exactly what remains.
-
 > **Note on running this yourself.** The dataset, checkpoints and SHAP pickles are not in this repository — they are ~1.5 GB and live on Google Drive and an external handover drive. Without them the notebook halts at Day 0 by design. What is reproducible from a clone alone: the methodology (ADRs), the recorded results (`results/`), and the full experimental record (`journals/`). See [Reproducibility](#reproducibility).
+
+## Result
+
+The experiment posed two questions and answered both. It is finished as an experiment; nothing below is waiting on a measurement.
+
+**1. Are a class's top audio neurons causally load-bearing for that class? Yes.** Mean-ablating each probe-selected top-five set shifts target-class confidence in every one of the twelve class × model cells, and all twelve nominal target intervals exclude zero (Tables [VII and VIII](docs/vi-d-paper-writeup-guidance.md)). Concentration is heterogeneous rather than uniform: 4 of 6 base rows and 3 of 6 fine-tuned rows clear the inherited 2.5 selectivity ratio.
+
+**2. Do those neurons stay load-bearing through fine-tuning — is there a shared substrate? No.** Ablating the base model's top-five sets inside the fine-tuned model does no more damage than ablating five arbitrary audio dimensions. Against a measured 2000-subset random-ablation null, 0 of 6 classes clear it and 0 of 6 fall below it. Every per-class verdict is *no transfer signal above random ablation*. Full detail in [ADR 0006](docs/adr/0006-week3-transfer-null-and-band-withdrawal.md).
+
+Question 2 is the one this section was built to settle, and the answer is negative. That negative is the deliverable, not a shortfall. It is measured against a null constructed for the purpose rather than against a threshold chosen in advance, it reproduced exactly on an independent cold re-run, and it is why the preservation-versus-reassignment taxonomy was withdrawn instead of being reported — the taxonomy would have labelled all six classes *Preserved* on an artifact of the fine-tuned model's global fragility. Ruling that reading out is the substantive contribution.
+
+Stated at the strength the evidence carries, the finding is *no detected cross-model transfer signal above random ablation under this analysis*, which is not proof of absence. The claims ladder in [`docs/section-vi-d-professor-briefing.md`](docs/section-vi-d-professor-briefing.md) fixes the defensible wording for every claim in Section VI-D and lists the phrasings to avoid.
+
+**Review outcome, 2026-08-19.** Prof. KC Lan rejected Table IX — the cross-model coordinate transfer result — on the grounds that the transfer claim does not add meaning to the paper, and assigned a replacement direction rather than a fix. The rejection was editorial, not methodological: what was declined was carrying a null transfer claim into the paper, not the correctness of the measurement. Tables VII and VIII stand. The replacement direction asks whether the causally validated neuron sets correspond to physiologically grounded emotion markers (eGeMAPS for audio, FACS for video); that work is not in this repository. It was specified in [`docs/facs-egemaps-experiment-spec.md`](docs/facs-egemaps-experiment-spec.md), superseded by a fuller plan, and now lives in `neuron-feature-mapping`.
+
+One editorial item was never completed here: the Section VI-D prose for the IEEE submission. The tables and figures are filled from real artifacts; four prose blocks and two table headers were left unwritten. See the Week 4 row below.
 
 ## Motivation
 
@@ -38,7 +50,7 @@ The experiment follows the four-week protocol Prof. KC Lan supplied (`experiment
 | Week 1 — Activations & probes | ✅ COMPLETE | CLS activations cached, L1-logistic probes fit and sanity-checked on held-out test split (`results/week1_probe_auc.json`) |
 | Week 2 — Causal ablation | ✅ COMPLETE | Mean-ablation sweep run for both models (`results/week2_{base,finetuned}_ablation_sweep.json`). Probability drop, not accuracy, is the primary measure: the 144-sample test split quantizes accuracy to 4.17pp steps, coarser than every measured effect |
 | Week 3 — Transfer retention | ✅ COMPLETE — negative result | Substrate bands withdrawn; tested against a measured random-ablation null instead, and 0 of 6 classes clear it. Report as "no transfer signal above random ablation," never as shared substrate ([ADR 0006](docs/adr/0006-week3-transfer-null-and-band-withdrawal.md)) |
-| Week 4 — Results & paper integration | ⚠️ UNFINISHED AT FREEZE | Tables VII–X filled from real artifacts in [`docs/vi-d-paper-writeup-guidance.md`](docs/vi-d-paper-writeup-guidance.md). Remaining work is editorial and was never completed here: 4 unwritten prose blocks, 2 table headers need rewording. The Table IX caption and Section IV-C alignment items are moot — Table IX was scratched on review |
+| Week 4 — Results & paper integration | ✅ TABLES COMPLETE — prose pending | Tables VII–X filled from real artifacts in [`docs/vi-d-paper-writeup-guidance.md`](docs/vi-d-paper-writeup-guidance.md). No measurement is outstanding. What was never completed here is editorial: 4 unwritten prose blocks, 2 table headers need rewording. The Table IX caption and Section IV-C alignment items are moot — Table IX was scratched on review |
 
 ### How the current numbers were arrived at
 
@@ -125,7 +137,7 @@ I keep a daily experiment journal in [`journals/`](journals/). Each entry record
 
 Entries from July 27 to August 7 use a Phase A–E vocabulary that predates the v3 restart and their numbers are retracted. They are kept because they are the evidence base for the ADR 0004 diagnosis.
 
-The last entry, [`2026-08-19-session1.md`](journals/2026-08-19-session1.md), closes the repository: it records the review outcome, what was left unfinished, and where the work went.
+The last entry, [`2026-08-19-session1.md`](journals/2026-08-19-session1.md), closes the repository: it records the review outcome, what remained editorial, and where the work went.
 
 ## Key decisions
 
