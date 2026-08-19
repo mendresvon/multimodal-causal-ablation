@@ -31,7 +31,7 @@ The decisive test was `git log -S` over surviving history. But the four commits 
 
 The second argument, that sessions 2 and 3 completing Weeks 1–4 proves the 44100 Hz route clears the gate, assumes what it needs to show. The gate passed under the rebind, in a live runtime. The surviving record does not establish which route was bound when those weeks executed.
 
-The entry file has since been restored at [`2026-08-11-session1.md`](2026-08-11-session1.md), reconstructed from the session's own Claude Code transcript. It records the 56.94% / 47.92% halt, the runtime rebind of `IEMOCAP.__getitem__` onto `audio_16000.wav` with `win_length` pinned to 400, and the passing gate at 05:57 UTC: base 76.39%, fine-tuned 79.86%, both exact. The rebind is preserved verbatim at [`../docs/recovered/2026-08-11-session1-audio-rebind.py`](../docs/recovered/2026-08-11-session1-audio-rebind.py).
+The entry file has since been restored at [`2026-08-11-session1.md`](2026-08-11-session1.md), reconstructed from the session transcript. It records the 56.94% / 47.92% halt, the runtime rebind of `IEMOCAP.__getitem__` onto `audio_16000.wav` with `win_length` pinned to 400, and the passing gate at 05:57 UTC: base 76.39%, fine-tuned 79.86%, both exact. The rebind is preserved verbatim at [`../docs/recovered/2026-08-11-session1-audio-rebind.py`](../docs/recovered/2026-08-11-session1-audio-rebind.py).
 
 ### Where this landed
 

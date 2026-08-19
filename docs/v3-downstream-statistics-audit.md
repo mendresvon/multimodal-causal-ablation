@@ -2,7 +2,7 @@
 
 > **Recovered 2026-08-12.** This file was destroyed with the rest of the
 > 2026-08-11 session-2/3 working tree and was rebuilt by replaying the tool
-> calls that wrote it, from the Claude Code transcript
+> calls that wrote it, from the surviving session transcript
 > `ded06ca6-9d1e-48a9-9567-bb067b3b36c4.jsonl`. Content is byte-for-byte the
 > text those calls produced; only this note is new.
 
