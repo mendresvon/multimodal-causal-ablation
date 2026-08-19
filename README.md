@@ -1,8 +1,15 @@
 # Neuron-Level Causal Validation of Modality Competition in Multimodal Emotion Recognition
 
+> **This repository is frozen — read-only as of 2026-08-19.** Section VI-D is finished as an
+> experiment, and active work has moved to the successor repository
+> [`neuron-feature-mapping`](https://github.com/mendresvon/neuron-feature-mapping). Nothing here
+> is being updated. [FROZEN.md](FROZEN.md) records what moved where and why.
+
 This repository contains my implementation of Section VI-D for a paper on transfer learning effects in multimodal emotion recognition, co-authored with Prof. KC Lan and Tsung-Yi Ko. The central question: when a multimodal model learns to recognize emotions from audio, text, and video simultaneously, does it develop specialized neurons for the modality it relies on most, and do those neurons survive fine-tuning?
 
-**Status as of 2026-08-12:** the experiment is complete and the headline answer is negative. The base model's top neurons do no more damage inside the fine-tuned model than arbitrary neurons do. Remaining work is editorial. Full detail in [ADR 0006](docs/adr/0006-week3-transfer-null-and-band-withdrawal.md).
+**Final status, 2026-08-19.** The experiment is complete and the headline answer is negative: the base model's top neurons do no more damage inside the fine-tuned model than arbitrary neurons do. Full detail in [ADR 0006](docs/adr/0006-week3-transfer-null-and-band-withdrawal.md).
+
+On review, Prof. KC Lan rejected Table IX — the cross-model coordinate transfer result — on the grounds that the transfer claim does not add meaning to the paper, and assigned a replacement direction rather than a fix. Tables VII and VIII stand. The replacement direction asks whether the causally validated neuron sets correspond to physiologically grounded emotion markers (eGeMAPS for audio, FACS for video); that work is not in this repository. It was specified in [`docs/facs-egemaps-experiment-spec.md`](docs/facs-egemaps-experiment-spec.md), superseded by a fuller plan, and now lives in `neuron-feature-mapping`. The Section VI-D prose for the IEEE submission was still unfinished when this repository was frozen — see the Week 4 row below for exactly what remains.
 
 > **Note on running this yourself.** The dataset, checkpoints and SHAP pickles are not in this repository — they are ~1.5 GB and live on Google Drive and an external handover drive. Without them the notebook halts at Day 0 by design. What is reproducible from a clone alone: the methodology (ADRs), the recorded results (`results/`), and the full experimental record (`journals/`). See [Reproducibility](#reproducibility).
 
@@ -31,7 +38,7 @@ The experiment follows the four-week protocol Prof. KC Lan supplied (`experiment
 | Week 1 — Activations & probes | ✅ COMPLETE | CLS activations cached, L1-logistic probes fit and sanity-checked on held-out test split (`results/week1_probe_auc.json`) |
 | Week 2 — Causal ablation | ✅ COMPLETE | Mean-ablation sweep run for both models (`results/week2_{base,finetuned}_ablation_sweep.json`). Probability drop, not accuracy, is the primary measure: the 144-sample test split quantizes accuracy to 4.17pp steps, coarser than every measured effect |
 | Week 3 — Transfer retention | ✅ COMPLETE — negative result | Substrate bands withdrawn; tested against a measured random-ablation null instead, and 0 of 6 classes clear it. Report as "no transfer signal above random ablation," never as shared substrate ([ADR 0006](docs/adr/0006-week3-transfer-null-and-band-withdrawal.md)) |
-| Week 4 — Results & paper integration | 🟨 IN PROGRESS | Tables VII–X filled from real artifacts in [`docs/vi-d-paper-writeup-guidance.md`](docs/vi-d-paper-writeup-guidance.md). Remaining work is editorial: 4 unwritten prose blocks, 2 table headers need rewording, Table IX caption and Section IV-C wording need alignment |
+| Week 4 — Results & paper integration | ⚠️ UNFINISHED AT FREEZE | Tables VII–X filled from real artifacts in [`docs/vi-d-paper-writeup-guidance.md`](docs/vi-d-paper-writeup-guidance.md). Remaining work is editorial and was never completed here: 4 unwritten prose blocks, 2 table headers need rewording. The Table IX caption and Section IV-C alignment items are moot — Table IX was scratched on review |
 
 ### How the current numbers were arrived at
 
@@ -48,6 +55,7 @@ multimodal-causal-ablation-v3.ipynb   Main experiment notebook (Colab GPU)
 multimodal-causal-ablation{,-v2}.ipynb  Retracted v1/v2 runs, kept as evidence for ADR 0004
 CONTEXT.md                            Domain glossary and canonical terminology
 docs/adr/                             Architectural decision records
+docs/section-vi-d-professor-briefing.md  Full review briefing: tables, claims ladder, anticipated questions
 docs/provenance/                      Upstream training logs and the previous team's SHAP notebook
 results/                              All numbered artifacts from the 2026-08-12 cold run
 figures/                              Generated plots
@@ -60,6 +68,8 @@ Model/Dig-Data_Model-Main/            Vendored upstream MME2E model code (third 
 
 | File | Purpose |
 | :--- | :--- |
+| `docs/section-vi-d-professor-briefing.md` | The full briefing prepared for the review meeting: what every table means, the claims ladder, and defensible answers to 30 anticipated questions. The most complete single account of the experiment |
+| `docs/facs-egemaps-experiment-spec.md` | The FACS/eGeMAPS pivot spec written after Table IX was scratched. Kept as the lineage record; superseded by `docs/neuron-feature-bucket-plan.md` in `neuron-feature-mapping` |
 | `docs/vi-d-paper-writeup-guidance.md` | Section VI-D tables (VII–X) from real artifacts, rigor verdict, and what is still unwritten |
 | `docs/v3-downstream-statistics-audit.md` | Audit of the downstream statistics pipeline that motivated the probability-drop measure and the random-ablation null |
 | `docs/provenance/RML_{origin,finetune}_training_log.txt` | Original `main.py` stdout for both checkpoints; the source for the 76.39% / 79.86% fidelity targets and every `MODEL_ARGS` value |
@@ -69,6 +79,7 @@ Model/Dig-Data_Model-Main/            Vendored upstream MME2E model code (third 
 | `data/README.md` | Dataset provenance, canonical source, and extraction layout |
 | `journals/README.md` | Chronological index of all journal entries |
 | `journals/ERRATA.md` | Corrections raised against journal entries after the fact |
+| `FROZEN.md` | Freeze notice and the asset-by-asset map of what moved to `neuron-feature-mapping` |
 
 ## Reproducibility
 
@@ -113,6 +124,8 @@ If a cell halts, read its message before changing anything. Each `HALT` states w
 I keep a daily experiment journal in [`journals/`](journals/). Each entry records objectives, runtime state, execution parameters, empirical findings, debugging logs, interpretation, and a handoff checklist for the next session. Entries are not edited after the fact; corrections are recorded in [`journals/ERRATA.md`](journals/ERRATA.md).
 
 Entries from July 27 to August 7 use a Phase A–E vocabulary that predates the v3 restart and their numbers are retracted. They are kept because they are the evidence base for the ADR 0004 diagnosis.
+
+The last entry, [`2026-08-19-session1.md`](journals/2026-08-19-session1.md), closes the repository: it records the review outcome, what was left unfinished, and where the work went.
 
 ## Key decisions
 
