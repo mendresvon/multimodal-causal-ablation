@@ -4,7 +4,7 @@ Corrections raised against journal entries after the fact, and their resolutions
 
 ---
 
-## E1 — 2026-08-11 session 1: the audio sample-rate route
+## E1: 2026-08-11 session 1: the audio sample-rate route
 
 **Status:** resolved. The original entry was accurate; the erratum against it is withdrawn.
 
@@ -12,7 +12,7 @@ Corrections raised against journal entries after the fact, and their resolutions
 
 The session-1 entry reported that the Day 0 fidelity gate passed only after the audio branch was switched from `audio.wav` (44100 Hz) to `audio_16000.wav`, the 16 kHz clips the original training run read. The 16 kHz files were shipped as `data_bundle/RML_audio16k_all720.tar`, and a Google Drive upload stall was worked around by rebinding the loader inside the live runtime.
 
-### Erratum, raised 2026-08-11 session 4 — withdrawn
+### Erratum, raised 2026-08-11 session 4: withdrawn
 
 I could not find support for the 16 kHz claim anywhere else in the repository, and concluded the row was wrong:
 
@@ -23,16 +23,16 @@ I could not find support for the 16 kHz claim anywhere else in the repository, a
 
 On that basis I recommended treating the 16 kHz overlay tar as unused.
 
-### Counter-erratum, 2026-08-12 — the erratum was unsound
+### Counter-erratum, 2026-08-12: the erratum was unsound
 
 Both of the erratum's arguments fail.
 
-The decisive test was `git log -S` over surviving history. But the four commits that carried the rebind — `d08a914`, `4b6e008`, `0ed79f3`, `1d5aa39` — had already been destroyed by the Google Drive sync failure and the LFS-cache clear I used to recover from it. `git cat-file -t` reports each as "Not a valid object name", and `git fsck` cannot read `1d5aa39`. **Pickaxe cannot see pruned objects, so it is not a sound negative proof on this repository.**
+The decisive test was `git log -S` over surviving history. But the four commits that carried the rebind, `d08a914`, `4b6e008`, `0ed79f3`, `1d5aa39`, had already been destroyed by the Google Drive sync failure and the LFS-cache clear I used to recover from it. `git cat-file -t` reports each as "Not a valid object name", and `git fsck` cannot read `1d5aa39`. **Pickaxe cannot see pruned objects, so it is not a sound negative proof on this repository.**
 
-The second argument — that sessions 2 and 3 completing Weeks 1–4 proves the 44100 Hz route clears the gate — assumes what it needs to show. The gate passed under the rebind, in a live runtime. The surviving record does not establish which route was bound when those weeks executed.
+The second argument, that sessions 2 and 3 completing Weeks 1–4 proves the 44100 Hz route clears the gate, assumes what it needs to show. The gate passed under the rebind, in a live runtime. The surviving record does not establish which route was bound when those weeks executed.
 
 The entry file has since been restored at [`2026-08-11-session1.md`](2026-08-11-session1.md), reconstructed from the session's own Claude Code transcript. It records the 56.94% / 47.92% halt, the runtime rebind of `IEMOCAP.__getitem__` onto `audio_16000.wav` with `win_length` pinned to 400, and the passing gate at 05:57 UTC: base 76.39%, fine-tuned 79.86%, both exact. The rebind is preserved verbatim at [`../docs/recovered/2026-08-11-session1-audio-rebind.py`](../docs/recovered/2026-08-11-session1-audio-rebind.py).
 
 ### Where this landed
 
-The committed notebook halts at 56.94% on the 44100 Hz route, and the 16 kHz route is the one measured to reproduce the training log. The provenance question was closed on 2026-08-12 by the Day 0 step 2 SHAP cross-check (r = 1.000000) rather than by artifact identity — see [`2026-08-12-session1.md`](2026-08-12-session1.md).
+The committed notebook halts at 56.94% on the 44100 Hz route, and the 16 kHz route is the one measured to reproduce the training log. The provenance question was closed on 2026-08-12 by the Day 0 step 2 SHAP cross-check (r = 1.000000) rather than by artifact identity, see [`2026-08-12-session1.md`](2026-08-12-session1.md).

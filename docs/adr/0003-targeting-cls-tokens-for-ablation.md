@@ -4,18 +4,18 @@
 
 **Superseded by [ADR 0004](0004-v3-restart-data-provenance-and-fidelity-gate.md).** Retained as history.
 
-Two records were written under the number 0003 on different days; this is the earlier one. The core architectural finding below — that the 64-d CLS representation, not the 6-d FFN output, is the correct ablation target — still holds and carried forward into v3. What did not survive is the `.npy` shortcut in the Decision section: those cached features came from the fabricated `meta.pkl` that ADR 0004 diagnoses, and v3 extracts activations from live forward passes instead.
+Two records were written under the number 0003 on different days; this is the earlier one. The core architectural finding below, that the 64-d CLS representation, not the 6-d FFN output, is the correct ablation target, still holds and carried forward into v3. What did not survive is the `.npy` shortcut in the Decision section: those cached features came from the fabricated `meta.pkl` that ADR 0004 diagnoses, and v3 extracts activations from live forward passes instead.
 
 ## Context
 Prof KC Lan's causal ablation protocol explicitly instructs us to extract and ablate the **FFN output** of the dominant modality:
 > *"Pick the layer to hook: the FFN output for modality M... Confirm the feature dimensionality of that layer (should be 64... FFN output dim may differ from the raw CLS dim)."*
 
-However, upon inspecting the architecture of the `MME2E` model, we found that the Feed-Forward Network (FFN) represents the final classification head. Because the RML dataset has exactly 6 emotion classes, the FFN output projects the representation down to a tiny **6-dimensional vector** (the class logits). 
+However, upon inspecting the architecture of the `MME2E` model, we found that the Feed-Forward Network (FFN) represents the final classification head. Because the RML dataset has exactly 6 emotion classes, the FFN output projects the representation down to a tiny **6-dimensional vector** (the class logits).
 
 The 64-dimensional representation referenced in the paper (Section IV-C) is actually the post-Transformer **CLS-token representation** that feeds *into* this FFN classification head.
 
 ## Decision
-We will systematically diverge from the literal wording of the protocol and target the **CLS-token representations** rather than the FFN output for all Day 1-2 extractions and Week 2 ablations. 
+We will systematically diverge from the literal wording of the protocol and target the **CLS-token representations** rather than the FFN output for all Day 1-2 extractions and Week 2 ablations.
 
 We will accomplish this by taking the `.npy` shortcut: leveraging the pre-cached 1152-d full-dataset feature representations (which are concatenations of the CLS tokens) and slicing out the Audio dimensions (`1088:1152`).
 

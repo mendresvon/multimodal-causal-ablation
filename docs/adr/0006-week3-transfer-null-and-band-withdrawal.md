@@ -1,4 +1,4 @@
-# ADR 0006 — Week 3 Transfer Ratio: Random-Ablation Null and Withdrawal of the Substrate Bands
+# ADR 0006: Week 3 Transfer Ratio: Random-Ablation Null and Withdrawal of the Substrate Bands
 
 ## Status
 
@@ -13,7 +13,7 @@ ADR 0005 Decision 7 settled a disagreement between ADR 0001 and `CONTEXT.md` ove
 | ADR 0001 Decision 4 | R ≥ 0.70 | R < 0.30, fine-tuned drop sparse | R < 0.30, fine-tuned drop dense |
 | `CONTEXT.md` | R ≥ 0.80 | 0.20 ≤ R < 0.80 | R < 0.20 |
 
-The measured transfer ratios are 1.32, 1.39, 1.69, 2.07, 2.08 and 4.34. Every class sits above 1, so every class lands in Preservation under either scheme, and the taxonomy separates nothing. Worse, it invites the reading that `R > 1` means the base model's neurons remain load-bearing after fine-tuning — that the substrate was preserved.
+The measured transfer ratios are 1.32, 1.39, 1.69, 2.07, 2.08 and 4.34. Every class sits above 1, so every class lands in Preservation under either scheme, and the taxonomy separates nothing. Worse, it invites the reading that `R > 1` means the base model's neurons remain load-bearing after fine-tuning, that the substrate was preserved.
 
 That reading does not follow, because of a confound the bands cannot see. `R` is the ratio of the fine-tuned model's drop to the base model's drop under the same ablation. The fine-tuned model is simply more fragile: ablating *any* five audio-CLS dimensions hurts it more than it hurts the base model. A ratio above 1 is therefore the default state of this pair of models under any ablation whatsoever, not evidence about the particular neurons chosen. Clearing 1 is not a test. The comparison has to be against what arbitrary dimensions do.
 
@@ -29,7 +29,7 @@ A normalised or re-banded index must not be reintroduced later to rescue a trans
 
 ### 2. The transfer ratio is tested against a measured random-ablation null
 
-`results/week3_random_ablation_null.json` draws 2000 random 5-dimension subsets of the 64-dimensional audio CLS (`k = 5`, `seed = 20260812`, deliberately distinct from the bootstrap seed so the null and the CI are not sharing a stream) and, for each class, computes the same ratio the real top-5 subset gets. The estimator is the ratio of the mean fine-tuned drop to the mean base drop over subsets — a ratio of means, never a mean of ratios, since individual subsets can produce near-zero denominators. The CI is a bootstrap over subsets.
+`results/week3_random_ablation_null.json` draws 2000 random 5-dimension subsets of the 64-dimensional audio CLS (`k = 5`, `seed = 20260812`, deliberately distinct from the bootstrap seed so the null and the CI are not sharing a stream) and, for each class, computes the same ratio the real top-5 subset gets. The estimator is the ratio of the mean fine-tuned drop to the mean base drop over subsets, a ratio of means, never a mean of ratios, since individual subsets can produce near-zero denominators. The CI is a bootstrap over subsets.
 
 | class | base drop (pp) | fine-tuned drop (pp) | R | R 95% CI | R_null | R_null 95% CI |
 | :--- | ---: | ---: | ---: | :--- | ---: | :--- |
@@ -42,7 +42,7 @@ A normalised or re-banded index must not be reintroduced later to rescue a trans
 
 **Result: 0 of 6 classes have an `R` whose 95% CI clears the null, and 0 of 6 fall below it.** Every per-class verdict is `No transfer signal above random ablation`. The base model's top-5 neurons, ablated inside the fine-tuned model, do no more damage than five arbitrary audio dimensions.
 
-Fear is the class most likely to be mistaken for a signal and is the clearest illustration of why the null was needed. Its `R` of 4.34 is by far the largest, and under either band scheme it would have been the strongest Preservation case in the table. Its null is 4.01. The ratio is large because fear's base drop is 0.6387 pp — a small denominator inflates the ratio for random subsets exactly as it does for the selected ones. Its `R_defined_fraction_of_draws` is 0.99, the only class below 1.0, which is the same fragility showing up in the bootstrap.
+Fear is the class most likely to be mistaken for a signal and is the clearest illustration of why the null was needed. Its `R` of 4.34 is by far the largest, and under either band scheme it would have been the strongest Preservation case in the table. Its null is 4.01. The ratio is large because fear's base drop is 0.6387 pp, a small denominator inflates the ratio for random subsets exactly as it does for the selected ones. Its `R_defined_fraction_of_draws` is 0.99, the only class below 1.0, which is the same fragility showing up in the bootstrap.
 
 Happiness fails in the opposite direction and should be reported as such. Its `R` of 1.3926 has a 95% CI of [0.7825, 2.3622], whose lower bound is below 1. That interval is consistent with the fine-tuned model taking *less* damage than the base model under the same ablation, so happiness is the one class where even the raw ratio, before any comparison to the null, carries no directional information. It is also the class with an observed top-5 overlap of 0.
 
@@ -72,7 +72,7 @@ Overlap between the base and fine-tuned top-5 sets is drawn from Hypergeometric(
 
 The selectivity vectors separate cleanly: cosine similarity between the base and fine-tuned per-class selectivity vectors runs 0.9602–0.9896, all six classes are nearest their own class, and matched minus mismatched is +1.168221021057142. This is a correlational statement about the probe weights. The protocol's Week 3 question is causal, the ablation transfer answers it directly, and where the two disagree the causal measurement governs. The cosine result is reported as a supporting observation, not as transfer evidence.
 
-Day 13b (`results/week3_rank_validation.csv`, `results/table_x_probe_rank_validation.csv`) makes the same point about the selection rule itself. Across all 12 model-class pairs, ablating the probe's top-5 dimensions does less damage than ablating the measured top-5 — `probe_over_measured` runs 0.1585 to 0.7306, every pair below 0.80 — and the Spearman correlation between probe weight and measured effect over the top-16 union runs −0.5438 to +0.0023, negative in eleven of twelve. `|probe weight|` is a way of selecting candidates to test, not a way of identifying causal neurons.
+Day 13b (`results/week3_rank_validation.csv`, `results/table_x_probe_rank_validation.csv`) makes the same point about the selection rule itself. Across all 12 model-class pairs, ablating the probe's top-5 dimensions does less damage than ablating the measured top-5, `probe_over_measured` runs 0.1585 to 0.7306, every pair below 0.80, and the Spearman correlation between probe weight and measured effect over the top-16 union runs −0.5438 to +0.0023, negative in eleven of twelve. `|probe weight|` is a way of selecting candidates to test, not a way of identifying causal neurons.
 
 ## Consequences
 

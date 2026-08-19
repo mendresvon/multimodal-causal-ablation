@@ -7,7 +7,7 @@ separate repo outside the Google-Drive-mounted working directory.
 
 The professor reviewed the VI-D causal-ablation work in
 `docs/section-vi-d-professor-briefing.md` and rejected Table IX (cross-model
-coordinate transfer/alignment — already a documented negative result, see
+coordinate transfer/alignment, already a documented negative result, see
 project memory `v3-week3-retention-open-confound.md`). He said the transfer
 claim doesn't add meaning to the paper and assigned a replacement direction
 instead of asking for a fix.
@@ -18,17 +18,17 @@ effects, 7/12 pass concentration) actually correspond to known,
 physiologically-grounded emotion markers, rather than being an opaque
 coordinate set that merely moves a softmax. Two candidate reference schemes:
 
-- **Video:** Ekman's FACS (Facial Action Coding System) Action Units — a
+- **Video:** Ekman's FACS (Facial Action Coding System) Action Units, a
   muscle-movement-level coding scheme, later mapped to typical AU
   combinations per basic emotion (e.g. anger = AU4+AU5+AU7+AU23, happiness =
   AU6+AU12 "Duchenne smile").
 - **Audio:** eGeMAPS (extended Geneva Minimalistic Acoustic Parameter Set,
-  Eyben/Scherer) — the closest acoustic analog to FACS, standardized via
+  Eyben/Scherer), the closest acoustic analog to FACS, standardized via
   openSMILE. Covers F0 statistics, loudness/energy, jitter, shimmer, HNR,
   formants F1–F3, speech rate.
 
 This also functions as the answer to "does the existing VI-D work still have
-value" — it converts Tables VII/VIII from abstract coordinates into
+value", it converts Tables VII/VIII from abstract coordinates into
 coordinates that track known emotion physiology, without needing the killed
 transfer claim.
 
@@ -38,21 +38,21 @@ Full scope (all AUs x all eGeMAPS params x all 6 classes x both modalities x
 7 datasets) is over 1,000 correlation tests and not where this starts.
 First slice, chosen for lowest risk and reuse of already-validated work:
 
-- **Feature:** F0 (fundamental frequency / pitch) — anger is marked by pitch
+- **Feature:** F0 (fundamental frequency / pitch), anger is marked by pitch
   going up and becoming more variable, a well-known, simple acoustic marker.
-- **Modality:** audio only (eGeMAPS), not video/FACS yet — see Section 5 for
+- **Modality:** audio only (eGeMAPS), not video/FACS yet, see Section 5 for
   why video is deferred.
 - **Neurons:** the already-found, already causally-validated anger
-  coordinates for the base model — indices 20, 3, 39, 27, 53 (from Table VII,
+  coordinates for the base model, indices 20, 3, 39, 27, 53 (from Table VII,
   `docs/section-vi-d-professor-briefing.md`). No new probe-fitting needed for
-  this slice — reuse the existing set and just correlate.
+  this slice, reuse the existing set and just correlate.
 - **Datasets:** RML first (proves the pipeline on data the checkpoint was
   actually trained/tested on), then IEMOCAP as the generalization check.
 
 This is deliberately a correlation check against a known set, not a full
 neuron-to-bucket mapping sweep. The full 64 x n_features matrix (which
 resolves both "which neuron owns this bucket" and "does the known set
-correlate" as the same computation — the mapping is the argmax per feature
+correlate" as the same computation, the mapping is the argmax per feature
 column, the validation is the class-relevant submatrix) is the natural
 next step after this slice works, not the starting point.
 
@@ -82,7 +82,7 @@ everything needed except a checkpoint:
   LIRIS, eNTERFACE'05).
 - Dataset loader code already exists: `get_dataset_iemocap()`
   (`Model/Dig-Data_Model-Main/src/datasets.py:26`) is dataset-agnostic
-  despite the name — per ADR 0004, it's the same function that trained and
+  despite the name, per ADR 0004, it's the same function that trained and
   evaluated every dataset in the original thesis, including RML. Switching
   dataset is a matter of pointing at a different split-file, not writing new
   dataloader code.
@@ -118,11 +118,11 @@ vs. audio's 0.084/0.115; per-coordinate SHAP 0.000165/0.000094 vs audio's
 
 Before installing any AU-detection tool (OpenFace or py-feat), the video CLS
 signal itself needs checking: hook `v_transformer` for its 64-d CLS (no hook
-exists yet — only `a_transformer`/`a_out` and `v_out` are hooked in the
+exists yet, only `a_transformer`/`a_out` and `v_out` are hooked in the
 current notebook, and `v_out` is only 6 logits, not enough to recover the
 64-d CLS), then rerun the existing L1-probe + AUC pipeline on it. If
 per-class AUC sits near chance (audio's was 0.884/0.910 mean), the FACS arm
-is dead on arrival before any AU tool is built — a reportable finding in its
+is dead on arrival before any AU tool is built, a reportable finding in its
 own right, but it changes what's worth building. This check is why video is
 sequenced after the audio slice proves the method, not before.
 
@@ -138,7 +138,7 @@ sequenced after the audio slice proves the method, not before.
   p-value).
 
 **New work (belongs in the new repo):**
-- openSMILE eGeMAPS extraction pipeline, run on `audio_16000.wav` — the
+- openSMILE eGeMAPS extraction pipeline, run on `audio_16000.wav`: the
   16kHz route the checkpoints were actually trained on, not the 44.1kHz
   files (see project memory `v3-audio-route-is-44100-not-16k`).
 - Forward hook on `v_transformer` for the 64-d video CLS (needed later for
@@ -149,17 +149,17 @@ sequenced after the audio slice proves the method, not before.
 
 ## 7. Alignment hazards to carry over (from prior work on this model)
 
-- openSMILE must run on `audio_16000.wav`, not the 44.1kHz audio files —
+- openSMILE must run on `audio_16000.wav`, not the 44.1kHz audio files ,
   the checkpoints were trained on the 16kHz route.
 - Any frame- or sample-level extraction must exactly match the ordering and
   file-list the model's own dataloader used (including `.DS_Store`
-  exclusion) — extracting over "everything in the folder" silently
+  exclusion), extracting over "everything in the folder" silently
   misaligns activations against features.
 - Build a scratch Python environment outside any Google-Drive-mounted
   directory. Drive-mounted venvs are known to hang the shell.
 - If/when the full 64 x n_features matrix is eventually built (not this
   slice), multiplicity correction (Benjamini–Hochberg FDR) must be
-  preregistered up front — the VI-D briefing already lists uncorrected
+  preregistered up front, the VI-D briefing already lists uncorrected
   multiplicity as limitation #1 for Tables VII/VIII, and repeating that in
   a second experiment is not survivable.
 
@@ -167,14 +167,14 @@ sequenced after the audio slice proves the method, not before.
 
 This experiment will live in a new repo, separate from
 `multimodal-causal-ablation`, to avoid known Google-Drive-mount hazards
-(hanging venvs, hanging `git commit`). Location/creation deferred — user
+(hanging venvs, hanging `git commit`). Location/creation deferred, user
 wants the spec finished first.
 
 ## 9. Next steps, in order
 
 1. Resolve the checkpoint-provenance question in Section 4 (repo-side
    check, no new repo needed yet).
-2. Create the new repo (local git init or GitHub — decision deferred).
+2. Create the new repo (local git init or GitHub: decision deferred).
 3. Build the openSMILE eGeMAPS extraction pipeline, run on RML
    `audio_16000.wav` anger test clips.
 4. Correlate against the 5 known base-model anger neurons; report effect

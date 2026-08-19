@@ -5,11 +5,11 @@ Domain model and ubiquitous language for neuron-level causal validation of modal
 ## Language
 
 **Dominant Modality**:
-The single input modality (audio, visual, or text) whose neurons carry the highest **per-neuron** DeepSHAP attribution, `mean(|phi|)`, for a given model and dataset combination. Per-neuron rather than aggregate because the intervention is per-neuron: `mean(|phi|)` is `sum(|phi|)` divided by the modality's dimension count, so an aggregate reading rewards width alone (text's 1024 dims against audio's 64). For RML both readings are reported — audio leads per neuron, text leads on aggregate mass — and they are two views of one measurement, never two metrics that disagree. See [ADR 0005](docs/adr/0005-day0-dominant-modality-recompute-and-protocol-alignment.md).
+The single input modality (audio, visual, or text) whose neurons carry the highest **per-neuron** DeepSHAP attribution, `mean(|phi|)`, for a given model and dataset combination. Per-neuron rather than aggregate because the intervention is per-neuron: `mean(|phi|)` is `sum(|phi|)` divided by the modality's dimension count, so an aggregate reading rewards width alone (text's 1024 dims against audio's 64). For RML both readings are reported, audio leads per neuron, text leads on aggregate mass, and they are two views of one measurement, never two metrics that disagree. See [ADR 0005](docs/adr/0005-day0-dominant-modality-recompute-and-protocol-alignment.md).
 _Distinguish from_: Primary channel, main signal, winning modality
 
 **Aggregate Attribution Mass**:
-`sum(|phi|)` over a modality's dimensions — the total DeepSHAP attribution a modality contributes. Scales with dimension count, so it answers "how much does this branch matter in total", not "how much does each of its units matter".
+`sum(|phi|)` over a modality's dimensions, the total DeepSHAP attribution a modality contributes. Scales with dimension count, so it answers "how much does this branch matter in total", not "how much does each of its units matter".
 _Distinguish from_: Per-neuron attribution (`mean(|phi|)`), dominant modality (defined per-neuron above)
 
 **Causal Ablation**:
@@ -33,11 +33,11 @@ A set of top-k neurons whose mean-ablation causes a target class accuracy drop a
 _Distinguish from_: Class neuron group (not necessarily causal), target feature set
 
 **Transfer Retention Ratio (R)**:
-The ratio of the accuracy drop when base-model top neurons are ablated inside the fine-tuned model compared to when ablated inside the base model (R = ft_drop / base_drop). Reported for every class on real data; under ADR 0004 the prior epsilon-screen (marking small-base_drop classes as N/A) is withdrawn — it was introduced to hide artifacts from the v1/v2 broken data pipeline, not a genuine statistical need.
+The ratio of the accuracy drop when base-model top neurons are ablated inside the fine-tuned model compared to when ablated inside the base model (R = ft_drop / base_drop). Reported for every class on real data; under ADR 0004 the prior epsilon-screen (marking small-base_drop classes as N/A) is withdrawn, it was introduced to hide artifacts from the v1/v2 broken data pipeline, not a genuine statistical need.
 _Distinguish from_: Cross-ablation score, transfer ratio (too generic)
 
 **Substrate Preservation**:
-Outcome where R >= 0.80 (these bands, not ADR 0001 Decision 4's R >= 0.70 / R < 0.30 — see [ADR 0005](docs/adr/0005-day0-dominant-modality-recompute-and-protocol-alignment.md) Decision 7 for why), proving fine-tuning preserves and sharpens the base model's physical load-bearing neurons.
+Outcome where R >= 0.80 (these bands, not ADR 0001 Decision 4's R >= 0.70 / R < 0.30, see [ADR 0005](docs/adr/0005-day0-dominant-modality-recompute-and-protocol-alignment.md) Decision 7 for why), proving fine-tuning preserves and sharpens the base model's physical load-bearing neurons.
 _Distinguish from_: Substrate retention, feature preservation (does not imply sharpening)
 
 **Substrate Reassignment**:

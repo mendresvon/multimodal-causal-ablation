@@ -32,10 +32,10 @@ report the measurement floor as if it were a result.
 
 The concrete damage, straight from the artifacts:
 
-- **Base / anger**: accuracy drop **0.00 pp**, while the probability drop is **+4.33 pp**
+- Base / anger: accuracy drop **0.00 pp**, while the probability drop is **+4.33 pp**
   with a 95% CI of [3.12, 5.56] that excludes zero. Reported as accuracy, the strongest
   selective effect in the study reads as "no effect."
-- **Base / disgust**: mean absolute non-target accuracy drop is **0.00 pp**, so the
+- Base / disgust: mean absolute non-target accuracy drop is **0.00 pp**, so the
   selectivity ratio printed from accuracy is **infinite**.
 
 The replacement measure, already computed throughout the notebook, is the **mean drop in the
@@ -56,13 +56,13 @@ than as hiding an inconvenient result.
 4. Table IX header and caption.
 5. The prose paragraph introducing Tables VII/VIII (paper.txt line 125).
 6. The prose paragraph introducing Table IX (paper.txt line 147).
-7. Section V-C (Evaluation Metrics), which lists accuracy/precision/recall/F1 only — add one
+7. Section V-C (Evaluation Metrics), which lists accuracy/precision/recall/F1 only: add one
    sentence that VI-D additionally reports true-class probability and decision margin,
    because accuracy on a 24-sample-per-class split cannot resolve single-neuron interventions.
 
 ---
 
-## 3. Table VII — filled
+## 3. Table VII: filled
 
 **CAUSAL ABLATION SELECTIVITY, BASE RML MODEL (TOP-5 NEURONS PER CLASS)**
 
@@ -83,7 +83,7 @@ under it, which is worth one clause in the prose rather than silence.
 
 ---
 
-## 4. Table VIII — filled
+## 4. Table VIII: filled
 
 **CAUSAL ABLATION SELECTIVITY, FINE-TUNED RML MODEL (TOP-5 NEURONS PER CLASS)**
 
@@ -102,7 +102,7 @@ sensitivity difference that Table IX has to control for.
 
 ---
 
-## 5. Table IX — filled, with a changed caption
+## 5. Table IX: filled, with a changed caption
 
 The draft caption reads **PRESERVATION VS. REASSIGNMENT OF CLASS-SELECTIVE NEURONS ACROSS
 FINE-TUNING**, and the Verdict column is drafted to receive "Preserved" or "Reassigned."
@@ -125,7 +125,7 @@ RANDOM 5-DIMENSION NULL.**
 
 Notes for the caption or a footnote:
 
-- The Δ P(true) column is a real, resolvable effect in every row — all six CIs exclude zero.
+- The Δ P(true) column is a real, resolvable effect in every row: all six CIs exclude zero.
   The units still do damage in the fine-tuned model. What fails is the claim that they do
   **more** damage than five arbitrary dimensions would.
 - Overlap null is Hypergeometric(64, 5, 5); expected overlap by chance is 0.39. An overlap of
@@ -148,8 +148,8 @@ All twelve top-5 sets produce a target-class probability drop whose 95% CI exclu
 the ranked units are causally load-bearing in both models. Selectivity is class-dependent:
 four of six classes in the base model (anger, disgust, sadness, surprise) and three of six in
 the fine-tuned model (anger, sadness, surprise) exceed the 2.5x threshold, with anger and
-sadness selective in both. Fear is the consistent exception — 1.10 in the base model, 1.70
-fine-tuned — and its probe AUC is also the lowest of the six (0.767 base, 0.806 fine-tuned),
+sadness selective in both. Fear is the consistent exception, 1.10 in the base model, 1.70
+fine-tuned, and its probe AUC is also the lowest of the six (0.767 base, 0.806 fine-tuned),
 so the ranking has the least to work with there. Happiness sits at 2.48 base and 2.01
 fine-tuned, just below threshold in both.
 
@@ -177,7 +177,7 @@ This is where the draft's suggested mechanistic story must **not** be written. T
 proposes that if the units were reassigned, this explains RML's limited gain. The data does
 not support writing that, and it does not support the preservation branch either.
 
-What to write instead — two findings that point in different directions and should be reported
+What to write instead, two findings that point in different directions and should be reported
 as such:
 
 1. **The representational geometry is preserved.** Matched-class cosine similarity between
@@ -207,8 +207,8 @@ other modalities is future work.
 Write that the causal validation **supported the correlational finding in part and complicated
 it in part**: targeted ablation of probe-ranked audio units causally moves the target class in
 both models, which is direct evidence that the attributed modality is load-bearing rather than
-merely correlated; but the finer claim — that fine-tuning preserves or reassigns specific
-class-selective units — did not separate from a random-ablation null, so the mechanism behind
+merely correlated; but the finer claim, that fine-tuning preserves or reassigns specific
+class-selective units, did not separate from a random-ablation null, so the mechanism behind
 RML's limited gain remains open. The remaining five datasets still rest on correlational
 DeepSHAP evidence.
 
@@ -248,11 +248,11 @@ it as "the two metrics disagree."
 **Open question for the co-authors, flagged not settled**: does the per-neuron reading change
 the dominant modality for any of the other five datasets? If it does, Table IV moves, and
 Table IV is the paper's central claim. The recommendation here is to scope the per-neuron
-reading explicitly to VI-D and leave VI-C on the aggregate definition — but that is a
+reading explicitly to VI-D and leave VI-C on the aggregate definition, but that is a
 co-author decision, not one to make silently.
 
-One related oddity worth a sentence but not a chase: Table III lists RML as **V, A** — no
-native text track — which makes "text dominant by aggregate mass" independently strange.
+One related oddity worth a sentence but not a chase: Table III lists RML as **V, A**, no
+native text track, which makes "text dominant by aggregate mass" independently strange.
 
 ---
 
@@ -270,7 +270,7 @@ native text track — which makes "text dominant by aggregate mass" independentl
 - **Falsification pair.** Full 64-dimension audio knockout costs 18.06 points; a random
   5-dimension control costs 0.00. The intervention machinery moves the model when it should
   and does not when it should not.
-- **Hook correctness.** Write-through verified — under a full 64-dimension clamp all 144
+- **Hook correctness.** Write-through verified: under a full 64-dimension clamp all 144
   samples share one identical activation vector, max deviation 0.00e+00.
 - **Fast path.** The cached-activation evaluation path is checked against real hooked forward
   passes at three operating points; max absolute probability deviation 9.43e-06 against a
@@ -300,7 +300,7 @@ native text track — which makes "text dominant by aggregate mass" independentl
    state explicitly that CIs are per-comparison and uncorrected, give the counts, and scope
    the section as exploratory single-dataset validation. Worth adding that a Holm correction
    across the twelve target effects would most plausibly flip only **fear in the base model**
-   (CI [0.14, 1.10]) — a class already reported as non-selective — so the correction costs the
+   (CI [0.14, 1.10]), a class already reported as non-selective, so the correction costs the
    conclusions nothing. Computing adjusted intervals properly would need the per-sample
    difference arrays, which are not in `results/`, so this is a documentation fix, not a run.
 2. **n = 24 per class, one split, one seed per analysis.** No repeated splits, no
@@ -328,7 +328,7 @@ native text track — which makes "text dominant by aggregate mass" independentl
 7. Add a new figure: `figures/dose_response_k_sweep.png`, with a caption stating monotone
    target damage in k for all 12 class-model pairs and selectivity decaying toward 1.
 8. Add a short paragraph to VI-D §1 stating the measurement-resolution argument (24 samples
-   per class, 4.17 pp accuracy quantum) — this is the justification for the whole metric
+   per class, 4.17 pp accuracy quantum), this is the justification for the whole metric
    change and it should be visible, not buried in a footnote.
 9. Add the probe-ranking-shortfall caveat to VI-D §2 and one clause to Limitation 1.
 10. Footnote or appendix: the `legacy_acc_*` argmax numbers, so the accuracy result is

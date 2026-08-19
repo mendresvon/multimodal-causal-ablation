@@ -4,7 +4,7 @@ Prepared 2026-08-13 from the current v3 notebook, exported results, upstream mod
 
 ## The 90-second answer
 
-> Section VI-D is a preliminary, model-internal causal case study on RML. Section VI-C uses DeepSHAP, so it can say which representation is associated with predictions but not whether particular units are functionally necessary. I target the 64-dimensional post-Transformer audio CLS representation because audio has the highest attribution per coordinate in both RML models—5.21 times the runner-up in the scratch base model and 6.94 times in the fine-tuned model—even though text has greater total attribution mass because it has 1,024 coordinates.
+> Section VI-D is a preliminary, model-internal causal case study on RML. Section VI-C uses DeepSHAP, so it can say which representation is associated with predictions but not whether particular units are functionally necessary. I target the 64-dimensional post-Transformer audio CLS representation because audio has the highest attribution per coordinate in both RML models, 5.21 times the runner-up in the scratch base model and 6.94 times in the fine-tuned model, even though text has greater total attribution mass because it has 1,024 coordinates.
 >
 > I fit one-vs-rest L1 logistic probes on 518 training utterances to select five candidate coordinates per class, then replace those coordinates at inference with their model-specific training-set means. I evaluate on 144 held-out utterances, 24 per class. Per-class accuracy has a 4.17-percentage-point quantum, so it cannot resolve these small interventions; the primary outcome is mean drop in true-class softmax probability with 2,000 paired bootstrap draws.
 >
@@ -272,7 +272,7 @@ The null uses seed 20260812, distinct from the sample bootstrap. It reports a ra
 
 Every R point estimate is above its null point estimate, but all R intervals overlap the corresponding null interval. The data are directional but imprecise. Fear illustrates denominator inflation: R=4.34 looks dramatic until compared with random R=4.01. Happiness’s R interval includes values below 1. (`results/week3_transfer_retention.csv`; ADR 0006, Decisions 2–3.)
 
-### What the comparison rule is—and is not
+### What the comparison rule is, and is not
 
 Day 15 calls a result above null only if `R`’s lower confidence endpoint exceeds `R_null`’s upper endpoint. These intervals are obtained separately:
 

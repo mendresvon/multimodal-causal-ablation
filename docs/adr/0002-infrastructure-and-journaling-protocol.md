@@ -7,7 +7,7 @@ Accepted
 
 ## Context
 
-Section VI-D requires running neuron-level causal ablation experiments across multiple Colab GPU sessions over days or weeks. Each session starts from scratch — no installed packages, no cached tensors, no execution state. Without explicit infrastructure, work would be lost between sessions, results would lack provenance, and the experiment would not meet IEEE reproducibility standards.
+Section VI-D requires running neuron-level causal ablation experiments across multiple Colab GPU sessions over days or weeks. Each session starts from scratch, no installed packages, no cached tensors, no execution state. Without explicit infrastructure, work would be lost between sessions, results would lack provenance, and the experiment would not meet IEEE reproducibility standards.
 
 Additionally, this repository will serve as a grad school application portfolio piece, so its public GitHub presence needs to reflect research maturity.
 
@@ -24,9 +24,9 @@ Daily entries in `journals/YYYY-MM-DD.md` follow a fixed 7-part structure: (1) O
 *Why 7 parts instead of free-form?* Colab sessions end abruptly. The Handoff Checklist (part 7) guarantees the next session can resume without guesswork. The Runtime State (part 2) captures the exact environment, so results can be attributed to specific dependency versions. Free-form entries from the first two days lacked this structure and were harder to pick up from.
 
 ### 3. Artifact Naming and Storage Convention
-- `checkpoints/activations/` — cached tensors (Google Drive only, not Git-tracked)
-- `results/` — lightweight CSV/JSON metrics (Git-tracked)
-- `figures/` — publication plots in PNG and SVG (Git-tracked)
+- `checkpoints/activations/`: cached tensors (Google Drive only, not Git-tracked)
+- `results/`: lightweight CSV/JSON metrics (Git-tracked)
+- `figures/`: publication plots in PNG and SVG (Git-tracked)
 - Naming pattern: `{phase}_{model}_{description}.{ext}`
 
 *Why separate results from checkpoints?* Results are small, reviewable, and diffable in Git. Cached tensors are large and regenerable from checkpoints + code. Mixing them would either bloat the repo or lose provenance.

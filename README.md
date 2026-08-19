@@ -123,11 +123,11 @@ Colab's preinstalled packages conflict with the pinned PyTorch 2.2.2 often enoug
 
 Day 0 is a sequence of halting gates, in this order. Each stops the notebook rather than warning and continuing. All five passed on the 2026-08-12 cold run:
 
-1. **Checkpoint identity**: SHA-256 of both `.pt` files must match ADR 0004's recorded hashes.
-2. **Data integrity**: every `audio.wav` and every video frame path the loader will construct must exist across all 720 folders, with no stray files that would shift the frame count.
-3. **Fidelity**: both checkpoints must reproduce 76.39% / 79.86% test accuracy within 1 percentage point. There is no label-permutation solver; the label order is the fixed constant from `getEmotionDict()`.
-4. **Dominant modality**: recomputed from the DeepSHAP pickles, required to rank audio first per neuron for every class in both models.
-5. **Falsification pair**: a mechanical proof that the ablation hook writes through, then a full-64 knockout (must move accuracy) and a random-5 control (must not).
+1. Checkpoint identity: SHA-256 of both `.pt` files must match ADR 0004's recorded hashes.
+2. Data integrity: every `audio.wav` and every video frame path the loader will construct must exist across all 720 folders, with no stray files that would shift the frame count.
+3. Fidelity: both checkpoints must reproduce 76.39% / 79.86% test accuracy within 1 percentage point. There is no label-permutation solver; the label order is the fixed constant from `getEmotionDict()`.
+4. Dominant modality: recomputed from the DeepSHAP pickles, required to rank audio first per neuron for every class in both models.
+5. Falsification pair: a mechanical proof that the ablation hook writes through, then a full-64 knockout (must move accuracy) and a random-5 control (must not).
 
 If a cell halts, read its message before changing anything. Each `HALT` states what to check and, where relevant, what *not* to assume: a Colab Drive-mount glitch looks exactly like missing data.
 
@@ -143,12 +143,12 @@ The last entry, [`2026-08-19-session1.md`](journals/2026-08-19-session1.md), clo
 
 Methodology and infrastructure choices are recorded as architectural decision records in [`docs/adr/`](docs/adr/):
 
-- **[ADR 0001](docs/adr/0001-causal-validation-methodology.md)**: Causal validation methodology: modality selection, probe thresholds, ablation parameters, substrate outcome taxonomy.
-- **[ADR 0002](docs/adr/0002-infrastructure-and-journaling-protocol.md)**: Infrastructure and journaling: Git scope, artifact storage, session lifecycle, deterministic seed policy.
-- **ADR 0003**: Two records were written under this number on different days (`0003-targeting-cls-tokens-for-ablation.md` and `0003-causal-ablation-v2-methodology-remediation.md`). Both are superseded by ADR 0004 and retained only as history. The numbering collision is left as-is rather than rewritten.
-- **[ADR 0004](docs/adr/0004-v3-restart-data-provenance-and-fidelity-gate.md)**: V3 restart: root-cause diagnosis of the v1/v2 failures, canonical data source, halting Day 0 fidelity gate. Supersedes both 0003 records.
-- **[ADR 0005](docs/adr/0005-day0-dominant-modality-recompute-and-protocol-alignment.md)**: Dominant-modality recompute, Day/Week protocol alignment, frame-path integrity gate, exact fast path for Weeks 2–3, and resolution of the ADR 0001 / `CONTEXT.md` taxonomy conflict. Extends ADR 0004.
-- **[ADR 0006](docs/adr/0006-week3-transfer-null-and-band-withdrawal.md)**: Withdraws the Week 3 substrate-preservation bands, replaces them with a measured random-ablation null, and switches the primary measure from argmax accuracy to probability drop.
+- [ADR 0001](docs/adr/0001-causal-validation-methodology.md): Causal validation methodology: modality selection, probe thresholds, ablation parameters, substrate outcome taxonomy.
+- [ADR 0002](docs/adr/0002-infrastructure-and-journaling-protocol.md): Infrastructure and journaling: Git scope, artifact storage, session lifecycle, deterministic seed policy.
+- ADR 0003: Two records were written under this number on different days (`0003-targeting-cls-tokens-for-ablation.md` and `0003-causal-ablation-v2-methodology-remediation.md`). Both are superseded by ADR 0004 and retained only as history. The numbering collision is left as-is rather than rewritten.
+- [ADR 0004](docs/adr/0004-v3-restart-data-provenance-and-fidelity-gate.md): V3 restart: root-cause diagnosis of the v1/v2 failures, canonical data source, halting Day 0 fidelity gate. Supersedes both 0003 records.
+- [ADR 0005](docs/adr/0005-day0-dominant-modality-recompute-and-protocol-alignment.md): Dominant-modality recompute, Day/Week protocol alignment, frame-path integrity gate, exact fast path for Weeks 2–3, and resolution of the ADR 0001 / `CONTEXT.md` taxonomy conflict. Extends ADR 0004.
+- [ADR 0006](docs/adr/0006-week3-transfer-null-and-band-withdrawal.md): Withdraws the Week 3 substrate-preservation bands, replaces them with a measured random-ablation null, and switches the primary measure from argmax accuracy to probability drop.
 
 ## Acknowledgments
 

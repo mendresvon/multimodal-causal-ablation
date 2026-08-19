@@ -21,7 +21,7 @@ executed yet, so this document still describes the last measured numbers.
 
 The cleared outputs are not lost: the executed run they came from is committed in
 `1d5aa39`, and the numbers this audit turns on are quoted in §3 above. Before re-running,
-reload the notebook in the IDE — the file was rewritten on disk, and an editor still
+reload the notebook in the IDE, the file was rewritten on disk, and an editor still
 holding the old cells in memory will overwrite them on its next save.
 
 ---
@@ -48,7 +48,7 @@ The failure is entirely in how per-class effects are *measured* and then *divide
 
 ## 2. Root cause: the measurement has no resolution
 
-The evaluation split is 144 samples across 6 classes — 24 per class. Per-class accuracy
+The evaluation split is 144 samples across 6 classes, 24 per class. Per-class accuracy
 is `mean(argmax(logits) == label)`, so the finest per-class effect the harness can
 represent is **one sample = 4.1667pp**. There is no smaller number available to it.
 
@@ -83,7 +83,7 @@ exactly zero:
 | finetuned | fear | 4.166667 | **0.000000** | 4.166667e+06 | SELECTIVE |
 
 Three of the five positive verdicts are this. Each says "one sample moved, and nothing
-else moved" — which on a 24-sample-per-class grid is the single most likely outcome of
+else moved", which on a 24-sample-per-class grid is the single most likely outcome of
 noise, not evidence of a causally class-selective circuit.
 
 ### 3.2 The threshold resolves on float residue
@@ -99,7 +99,7 @@ carrying accumulated float error. The comparison is at a knife-edge that the ari
 cannot resolve.
 
 That accounts for the fourth positive verdict. The fifth, `finetuned/disgust` at 5.00x, is
-the only one produced by neither an epsilon nor a tie — and it is 4.1667 / 0.8333, i.e.
+the only one produced by neither an epsilon nor a tie, and it is 4.1667 / 0.8333, i.e.
 one target sample moved and one non-target sample moved. **Zero of five survive.**
 
 ### 3.3 R is a ratio of two single samples (Week 3, Day 15)
@@ -109,7 +109,7 @@ r = ft_drop / base_drop if abs(base_drop) > 1e-9 else float('nan')
 ```
 
 Both operands are quantized to {0, 4.1667, 8.3333}. R can therefore only take the values
-0, 1, 2, or NaN — which is exactly what the table shows. `R = 1.0` labelled
+0, 1, 2, or NaN, which is exactly what the table shows. `R = 1.0` labelled
 "Substrate Preservation" means *one sample moved in the base model and one sample moved in
 the fine-tuned model*. Three of six rows are NaN purely because `base_drop` happened to
 land on zero.
@@ -132,7 +132,7 @@ Cell 25 prints an explicit warning that all six rows are single-sample noise, an
 table_ix = retention_df[['class', 'cosine_similarity', 'ft_drop_pp', 'R', 'outcome']]
 ```
 
-`small_base_drop_flag` is dropped. `outcome` — the string "Substrate Preservation" — is
+`small_base_drop_flag` is dropped. `outcome`, the string "Substrate Preservation", is
 kept. Tables VII and VIII do the same thing with `causally_class_selective`: the boolean
 ships, the denominator that produced it does not.
 
@@ -144,8 +144,8 @@ notebook diagnoses its own problem correctly and then exports the conclusions an
 
 The Day 3 assert is `n_nonzero_weights >= 5`. `finetuned/anger` passes with exactly 5/64
 and `base/anger` with 6/64. For those classes the "top-5 neurons" is the entire set L1
-retained, ordered by a ranking with almost nothing left to rank. Not a bug — the assert
-does what it says — but it weakens the claim the ablation is meant to test, and anger is
+retained, ordered by a ranking with almost nothing left to rank. Not a bug, the assert
+does what it says, but it weakens the claim the ablation is meant to test, and anger is
 one of the classes carrying a positive selectivity verdict in Table VIII.
 
 ## 6. What was changed
@@ -177,7 +177,7 @@ that are defined **per sample**, in Week 2 Days 6–7 (`per_sample_effects`,
   column. No ratio is computed from it any more.
 
 `MME2E.weighted_fusion` is `nn.Linear(3, 1, bias=False)` (`src/models/e2e.py:83`), so the
-fast path's logits are exact in absolute value, not merely argmax-exact — which is what
+fast path's logits are exact in absolute value, not merely argmax-exact, which is what
 licenses reading probabilities and margins off them.
 
 ### 6.2 The guards
@@ -188,8 +188,8 @@ licenses reading probabilities and margins off them.
   collateral damage being summarised is not itself resolvable), or the mean absolute
   non-target effect is below a `MIN_DENOM_PP = 0.10` floor (a near-zero denominator
   explodes the ratio however it arose). A voided denominator **with** a resolvable target
-  effect is reported as an *isolated* effect by name — the strongest possible outcome, and
-  precisely the one a ratio cannot express — rather than converted into a large finite
+  effect is reported as an *isolated* effect by name, the strongest possible outcome, and
+  precisely the one a ratio cannot express, rather than converted into a large finite
   number.
 - The resolvability condition is phrased as "at least one non-target class is resolvable"
   rather than "the denominator's own CI excludes zero" because `mean|x|` is strictly
@@ -228,14 +228,14 @@ licenses reading probabilities and margins off them.
 ### 6.4 One check added while in there
 
 The Days 6–7 discriminator compared only per-class accuracy, which is **permutation
-invariant** — it would pass even if the cached rows were misaligned with the loader, and
+invariant**, it would pass even if the cached rows were misaligned with the loader, and
 every continuous measure above depends on that alignment. It now also compares fused
 probabilities elementwise and halts if they differ by more than `1e-3` (float32 GPU-vs-CPU
 noise is ~`1e-6`; a row permutation would be O(1)).
 
 ## 7. Provenance of the evidence
 
-`results/` on the local Drive mount is empty, but the artifacts **do** exist in web Drive —
+`results/` on the local Drive mount is empty, but the artifacts **do** exist in web Drive ,
 `week2_base_ablation_sweep.json` (38412 B) and `week2_finetuned_ablation_sweep.json`
 (38888 B), both written 2026-08-11T06:09Z. The local mount is simply behind; the Colab
 runtime writes to `/content/drive/MyDrive/...`, which is authoritative. Local Drive files
@@ -243,7 +243,7 @@ should not be trusted as current for anything the notebook produced.
 
 **Everything in §§1–5 is drawn from the k=5 slice printed in the committed notebook
 outputs**, which is exactly what Tables VII/VIII/IX were built from. The full sweep JSONs
-would only add whether the dose-response curve is monotone at k = 16/32/48/64 — a
+would only add whether the dose-response curve is monotone at k = 16/32/48/64, a
 nice-to-have that changes no conclusion here, and the aggregate audio effect is already
 established independently (76.39% → 56.25% at k=64).
 
@@ -264,7 +264,7 @@ new numbers expose rather than create.
   CI that excludes zero. Nothing rests on an unresolvable effect any more.
 - The selectivity denominator is healthy on real data: min 0.0759pp, median 2.4642pp, max
   30.0007pp, with **1/96** cells below the `MIN_DENOM_PP = 0.10pp` floor. The floor is
-  therefore doing what it was meant to do — voiding a single genuinely degenerate cell — and
+  therefore doing what it was meant to do, voiding a single genuinely degenerate cell, and
   is not silently voiding or silently passing the table. 95 ratios carry a verdict, 1 is
   undefined with a stated reason.
 - Selectivity at k=5 is now a discriminating column rather than a constant: base model 4/6
@@ -288,7 +288,7 @@ and the same rows:
 | surprise | 2.865pp | 4.742pp | 1.65 |
 
 In four of six classes an *externally chosen* set of five dimensions damages the fine-tuned
-model more than the set its own L1 probe ranked highest — by 2.5× for disgust. The precise
+model more than the set its own L1 probe ranked highest, by 2.5× for disgust. The precise
 claim this supports is that **|probe weight| does not predict ablation damage magnitude**,
 not that the Week 1 ranking is invalid: the two models' probes are fit on different
 activations, so a set of five dimensions that happens to lie along the fine-tuned model's
@@ -301,8 +301,8 @@ transfer claim is built on top of it.
 ### 8.3 The retention band scheme is undefined over the range the data actually occupies
 
 Every one of the six classes returned R > 1 (1.32 to 4.34) and every one was labelled
-*Substrate Preservation*. The band boundaries — Preservation ≥ 0.80, Reassignment
-0.20–0.80, Dispersion < 0.20 — were written on the assumption that R ∈ [0, 1]. Fear
+*Substrate Preservation*. The band boundaries, Preservation ≥ 0.80, Reassignment
+0.20–0.80, Dispersion < 0.20, were written on the assumption that R ∈ [0, 1]. Fear
 (R = 4.34, CI [2.68, 9.34]) is labelled Preservation while meaning that the base model's
 neurons hurt the fine-tuned model 4.3× *more* than they hurt the base model, which is not
 what "preservation" asserts. A column that takes one value for all six rows tests nothing.
@@ -345,7 +345,7 @@ the null: expected overlap 0.391, P(X ≥ 1) = 0.343, P(X ≥ 2) = 0.045, P(X �
 
 The notebook's WARNING for happiness (zero overlap yet "Substrate Preservation", and the
 one row whose band is not stable across its CI) is therefore not an edge case to note in
-passing — three rows have no evidence of shared substrate at all, while cosine similarity
+passing, three rows have no evidence of shared substrate at all, while cosine similarity
 between the full 64-dim selectivity vectors is 0.96–0.99 for every class. That gap is itself
 the finding: a near-unit cosine coexisting with chance-level top-k overlap means the
 selectivity vectors are dominated by a shared component and the top-k *ranking* is unstable.
@@ -361,7 +361,7 @@ would settle whether a transfer claim survives.
 
 ---
 
-## 9. Week 3 remediation (2026-08-11, session 2) — implemented, awaiting a run
+## 9. Week 3 remediation (2026-08-11, session 2): implemented, awaiting a run
 
 All four §8 problems are now instrumented in `multimodal-causal-ablation-v3.ipynb`. The
 decisions and their rationale are `docs/adr/0006-week3-transfer-null-and-band-withdrawal.md`;
@@ -382,5 +382,5 @@ deliberately not `BOOTSTRAP_SEED`.
 
 **What to read first when the run finishes.** Day 15's summary line: how many classes have an
 R whose CI clears the null. If that count is zero the cell prints a `NEGATIVE RESULT` block,
-and the Week 3 subsection is written as a null result with a null distribution behind it —
+and the Week 3 subsection is written as a null result with a null distribution behind it ,
 not as a shared-substrate finding. §8.6's verdict stands until that number exists.

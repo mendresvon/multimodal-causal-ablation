@@ -13,7 +13,7 @@ These files are too large for Git and are stored on Google Drive only. To verify
 
 ### DeepSHAP pickles
 
-Each is `{'SHAP_value': [6 arrays of (144, 1152)], 'test_feature': tensor(144, 1152)}` over the RML test split, where the 1152 features are `[text_cls 1024 | v_cls 64 | a_cls 64]` (layout confirmed against `docs/provenance/upstream_SHAP_analysis.ipynb`). Columns 1088 onward are the same audio CLS tensor this experiment ablates, so Week 1 cross-checks them against the freshly extracted activations — see ADR 0005 Decision 2. They hold CUDA tensors and need a CPU-mapping unpickler to load on a CPU machine; the notebook includes one.
+Each is `{'SHAP_value': [6 arrays of (144, 1152)], 'test_feature': tensor(144, 1152)}` over the RML test split, where the 1152 features are `[text_cls 1024 | v_cls 64 | a_cls 64]` (layout confirmed against `docs/provenance/upstream_SHAP_analysis.ipynb`). Columns 1088 onward are the same audio CLS tensor this experiment ablates, so Week 1 cross-checks them against the freshly extracted activations, see ADR 0005 Decision 2. They hold CUDA tensors and need a CPU-mapping unpickler to load on a CPU machine; the notebook includes one.
 
 ## Important: filename numbers are validation accuracy, not test accuracy
 
@@ -23,8 +23,8 @@ The actual **test** accuracy of these exact checkpoints, taken from the original
 
 | Checkpoint | Epoch saved | Test Accuracy | Matches paper Figure 4.3? |
 | :--- | :--- | :--- | :--- |
-| `base_model.pt` (RML_origin) | 29 | **76.39%** | Yes — base model |
-| `finetuned_model.pt` (RML_finetune) | 15 | **79.86%** | Yes — fine-tuned model |
+| `base_model.pt` (RML_origin) | 29 | **76.39%** | Yes: base model |
+| `finetuned_model.pt` (RML_finetune) | 15 | **79.86%** | Yes: fine-tuned model |
 
 This is the fidelity target the v3 notebook's Day 0 gate asserts against, on the canonical 144-sample RML test split.
 
@@ -39,4 +39,4 @@ shasum -a 256 checkpoints/base_model.pt checkpoints/finetuned_model.pt \
 
 Cached tensors extracted via forward hooks during Week 1 Days 1–2. Generated on-the-fly on Colab GPU and not distributed. Naming: `{model}_{split}_{acts|tlogits|vlogits|labels}.pt`, plus `{model}_{split}_ids.json` and `{model}_{split}_provenance.json`.
 
-Each split carries a provenance stamp recording the two checkpoint SHAs, the meta path, and a hash of the split ID list. A resumed run whose stamp doesn't match — or a cache directory from an older notebook with no stamp at all — halts rather than reusing tensors from a different era. If that happens, delete `checkpoints/activations/` and re-extract; do not edit the stamp.
+Each split carries a provenance stamp recording the two checkpoint SHAs, the meta path, and a hash of the split ID list. A resumed run whose stamp doesn't match, or a cache directory from an older notebook with no stamp at all, halts rather than reusing tensors from a different era. If that happens, delete `checkpoints/activations/` and re-extract; do not edit the stamp.
