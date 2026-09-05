@@ -36,3 +36,31 @@ The entry file has since been restored at [`2026-08-11-session1.md`](2026-08-11-
 ### Where this landed
 
 The committed notebook halts at 56.94% on the 44100 Hz route, and the 16 kHz route is the one measured to reproduce the training log. The provenance question was closed on 2026-08-12 by the Day 0 step 2 SHAP cross-check (r = 1.000000) rather than by artifact identity, see [`2026-08-12-session1.md`](2026-08-12-session1.md).
+
+---
+
+## E2: the freeze declaration and commit `c761017`
+
+**Status:** resolved by moving the two documents into the successor repository.
+
+`FROZEN.md` declares this repository read-only as of 2026-08-19, and the closing entry
+[`2026-08-19-session1.md`](2026-08-19-session1.md) states there is no next runtime for it. Commit
+`c761017`, dated 2026-09-05 and pushed to `origin/main`, nevertheless added two new documents:
+`docs/future-work-causal-screening-spec.md` and
+`docs/research-notes/neuron-causal-screening-methodology.md`.
+
+Both are forward-looking. They propose Approach B, direct single-neuron causal ablation screening,
+as a replacement for the L1 probe selection used in Section VI-D, and they argue it from the
+Table X audit already in `results/`. Neither corrects the record here, and neither belongs to a
+frozen archive.
+
+They were copied on 2026-09-05 into the successor repository `../neuron-feature-mapping` as
+`docs/plans/2026-09-05-causal-screening-approach-b-spec.md` and
+`docs/research/2026-09-05-neuron-causal-screening-methodology.md`, each carrying a provenance
+header naming this repository and commit `c761017`. Those copies are the live versions.
+
+The originals are left in place rather than deleted. `c761017` is already in the pushed history,
+so removing the files would make the history describe a state that never existed, which is the
+failure mode the freeze exists to prevent. `FROZEN.md` now records the move in its asset table.
+The freeze itself stands unchanged: this repository remains read-only, and the exception is
+recorded here rather than treated as precedent.

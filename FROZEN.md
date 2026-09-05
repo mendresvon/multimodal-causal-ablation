@@ -31,6 +31,8 @@ that ended this line of work and what remained editorial.
 | `docs/facs-egemaps-experiment-spec.md` | Stays here as history. It was the first spec for the replacement direction and is superseded by `neuron-feature-mapping/docs/neuron-feature-bucket-plan.md` |
 | `docs/section-vi-d-professor-briefing.md` | Stays here. Nothing in the successor repository restates it, and it is the fullest single account of Tables VII–X |
 | Frozen results tables (Table VII, Table X, week1 probe AUC) | `neuron-feature-mapping/results/` |
+| `docs/future-work-causal-screening-spec.md` | `neuron-feature-mapping/docs/plans/2026-09-05-causal-screening-approach-b-spec.md`. Added here after the freeze by commit `c761017` and moved on 2026-09-05; see `journals/ERRATA.md` E2. The copy there is the live one |
+| `docs/research-notes/neuron-causal-screening-methodology.md` | `neuron-feature-mapping/docs/research/2026-09-05-neuron-causal-screening-methodology.md`, same move and same erratum. Its ADR numbers refer to this repository's `docs/adr/`, not the successor's |
 
 Still referenced in place, not copied, to avoid a 231 MB Drive re-upload:
 `data_bundle/RML_audio16k_all720.tar`.
