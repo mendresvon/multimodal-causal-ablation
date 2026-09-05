@@ -1,0 +1,55 @@
+{
+  "timestamp": "2026-09-05T15:36:35+08:00",
+  "method": "5-step greedy forward selection optimizing selectivity contrast on training split (N=518)",
+  "evaluation_split": "held-out test split (N=144, 24 per class)",
+  "greedy_top5": {
+    "base": {
+      "anger": [3, 45, 27, 20, 61],
+      "disgust": [62, 33, 19, 44, 4],
+      "fear": [50, 1, 35, 38, 40],
+      "happiness": [26, 34, 63, 12, 5],
+      "sadness": [60, 33, 15, 4, 59],
+      "surprise": [42, 46, 28, 52, 43]
+    },
+    "finetuned": {
+      "anger": [3, 27, 45, 20, 61],
+      "disgust": [62, 19, 16, 33, 47],
+      "fear": [50, 1, 38, 35, 40],
+      "happiness": [26, 34, 12, 24, 63],
+      "sadness": [60, 33, 4, 15, 0],
+      "surprise": [28, 42, 46, 52, 43]
+    }
+  },
+  "overlap": {
+    "anger": {"overlap": 5, "p_val": 0.0},
+    "disgust": {"overlap": 3, "p_val": 0.0023},
+    "fear": {"overlap": 5, "p_val": 0.0},
+    "happiness": {"overlap": 4, "p_val": 0.0},
+    "sadness": {"overlap": 4, "p_val": 0.0},
+    "surprise": {"overlap": 5, "p_val": 0.0}
+  },
+  "base_test_comparison": {
+    "anger": {"probe_drop_pp": 4.329, "greedy_drop_pp": 6.001, "probe_ratio": 10.66, "greedy_ratio": 10.00},
+    "disgust": {"probe_drop_pp": 2.300, "greedy_drop_pp": 6.459, "probe_ratio": 3.14, "greedy_ratio": 7.63},
+    "fear": {"probe_drop_pp": 0.639, "greedy_drop_pp": 2.280, "probe_ratio": 1.10, "greedy_ratio": 4.17},
+    "happiness": {"probe_drop_pp": 2.043, "greedy_drop_pp": 4.581, "probe_ratio": 2.48, "greedy_ratio": 10.93},
+    "sadness": {"probe_drop_pp": 4.064, "greedy_drop_pp": 7.445, "probe_ratio": 5.14, "greedy_ratio": 7.05},
+    "surprise": {"probe_drop_pp": 2.288, "greedy_drop_pp": 3.079, "probe_ratio": 4.43, "greedy_ratio": 4.51}
+  },
+  "finetuned_test_comparison": {
+    "anger": {"probe_drop_pp": 5.767, "greedy_drop_pp": 9.732, "probe_ratio": 10.69, "greedy_ratio": 11.28},
+    "disgust": {"probe_drop_pp": 1.918, "greedy_drop_pp": 12.077, "probe_ratio": 1.89, "greedy_ratio": 12.95},
+    "fear": {"probe_drop_pp": 1.687, "greedy_drop_pp": 6.930, "probe_ratio": 1.70, "greedy_ratio": 7.56},
+    "happiness": {"probe_drop_pp": 2.861, "greedy_drop_pp": 6.176, "probe_ratio": 2.01, "greedy_ratio": 7.68},
+    "sadness": {"probe_drop_pp": 6.807, "greedy_drop_pp": 10.301, "probe_ratio": 5.70, "greedy_ratio": 8.13},
+    "surprise": {"probe_drop_pp": 2.865, "greedy_drop_pp": 6.183, "probe_ratio": 3.64, "greedy_ratio": 5.90}
+  },
+  "transfer_retention": {
+    "anger": {"base_drop": 6.001, "ft_drop": 9.732, "R": 1.622, "R_ci95": [1.21, 2.16], "R_null": 1.415, "R_null_ci95": [1.40, 1.43], "cleared_null": false},
+    "disgust": {"base_drop": 6.459, "ft_drop": 11.665, "R": 1.806, "R_ci95": [1.40, 2.24], "R_null": 2.005, "R_null_ci95": [1.99, 2.02], "cleared_null": false},
+    "fear": {"base_drop": 2.280, "ft_drop": 6.930, "R": 3.040, "R_ci95": [2.08, 6.15], "R_null": 4.009, "R_null_ci95": [3.90, 4.14], "cleared_null": false},
+    "happiness": {"base_drop": 4.581, "ft_drop": 6.166, "R": 1.346, "R_ci95": [0.93, 1.98], "R_null": 1.185, "R_null_ci95": [1.16, 1.21], "cleared_null": false},
+    "sadness": {"base_drop": 7.445, "ft_drop": 10.098, "R": 1.356, "R_ci95": [1.04, 1.81], "R_null": 1.207, "R_null_ci95": [1.20, 1.22], "cleared_null": false},
+    "surprise": {"base_drop": 3.079, "ft_drop": 6.183, "R": 2.008, "R_ci95": [1.60, 2.39], "R_null": 1.726, "R_null_ci95": [1.71, 1.74], "cleared_null": false}
+  }
+}
