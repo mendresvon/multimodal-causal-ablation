@@ -81,6 +81,8 @@ Model/Dig-Data_Model-Main/            Vendored upstream MME2E model code (third 
 | File | Purpose |
 | :--- | :--- |
 | `docs/section-vi-d-professor-briefing.md` | The full briefing prepared for the review meeting: what every table means, the claims ladder, and defensible answers to 30 anticipated questions. The most complete single account of the experiment |
+| `docs/future-work-causal-screening-spec.md` | Actionable protocol spec for future iterations: direct single-neuron causal screening and greedy forward selection (replacing L1 probes) |
+| `docs/research-notes/neuron-causal-screening-methodology.md` | Theoretical and causal assessment of single-neuron ablation vs linear probing (consulted with Codex `gpt-5.6-sol`) |
 | `docs/facs-egemaps-experiment-spec.md` | The FACS/eGeMAPS pivot spec written after Table IX was scratched. Kept as the lineage record; superseded by `docs/neuron-feature-bucket-plan.md` in `neuron-feature-mapping` |
 | `docs/vi-d-paper-writeup-guidance.md` | Section VI-D tables (VII–X) from real artifacts, rigor verdict, and what is still unwritten |
 | `docs/v3-downstream-statistics-audit.md` | Audit of the downstream statistics pipeline that motivated the probability-drop measure and the random-ablation null |
